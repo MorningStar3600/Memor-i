@@ -38,6 +38,8 @@ namespace Projet1
                         toDraw[i].Draw();
                     }
                 }
+
+                Thread.Sleep(20);
             }
         }
     }

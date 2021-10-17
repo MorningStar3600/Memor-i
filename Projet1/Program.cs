@@ -10,6 +10,8 @@ namespace Projet1
         public static int y = 0;
         public static void Main(string[] args)
         {
+
+            Config.initiate();
             
             int oldX = -1;
             int oldY = -1;
@@ -18,6 +20,12 @@ namespace Projet1
             
             Map m = new Map();
             m.Draw();
+            Console.ReadKey();
+            Console.ReadKey();
+            Console.ReadKey();
+            Console.ReadKey();
+            Console.ReadKey();
+            Console.ReadKey();
             Console.ReadKey();
 
             //ConsoleListener.run();
