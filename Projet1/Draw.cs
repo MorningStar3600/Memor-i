@@ -3,31 +3,26 @@ using System.Threading;
 
 namespace Projet1
 {
-    public class Draw
+    class Draws
     {
-        private List<Map> toDraw = new List<Map>();
-        private readonly Thread _thread;
+        static public List<DrawItem> toDraw { get; set; } = new List<DrawItem>();
+        static private readonly Thread _thread;
 
-        Draw()
+        static Draws()
         {
             _thread = new Thread(ReDraw);
         }
-        public void run()
+        static public void Run()
         {
             _thread.Start();
         }
 
-        public void stop()
+        static public void Stop()
         {
             _thread.Abort();
         }
 
-        public void AddToDraw(Map m)
-        {
-            toDraw.Add(m);
-        }
-
-        private void ReDraw()
+        static private void ReDraw()
         {
             while (true)
             {
@@ -39,7 +34,7 @@ namespace Projet1
                     }
                 }
 
-                Thread.Sleep(20);
+                Thread.Sleep(10);
             }
         }
     }

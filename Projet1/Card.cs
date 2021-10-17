@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.IO;
 namespace Projet1
 {
-    public class Card
+    class Card
     {
         private int id;
         public int width { get; }
         public int height { get; }
-        public List<string> value  {get;}
+        public List<string> value { get; } = new List<string>();
+        public List<string> hide { get; } = new List<string>();
+
+        public bool visible { get; set; } = true;
 
 
     public Card(int id, string name)
         {
-            this.value = new List<string>();
             this.id = id;
             string path = Directory.GetCurrentDirectory() + "\\card\\";
             try
@@ -23,19 +25,30 @@ namespace Projet1
 
                 string line = "";
                 int nbLine = 0;
-                int maxLength = 0;
+                int maxWidth = 0;
                 while (line != null)
                 {
                     line = sr.ReadLine();
                     if (line != null)
                     {
-                        if (line.Length > maxLength) maxLength = line.Length;
+                        if (line.Length > maxWidth) maxWidth = line.Length;
                         this.value.Add(line);
                         nbLine++;
                     }
                 }
-                this.width = maxLength;
+                this.width = maxWidth;
                 this.height = nbLine;
+
+                for (int i = 0; i < nbLine; i++)
+                {
+                    string tab = "";
+                    for (int j = 0; j < maxWidth; j++)
+                    {
+                        if ((j == 0 || j == maxWidth - 1) || (i == 0 || i == nbLine - 1)) tab += 'X';
+                        else tab += ' ';
+                    }
+                    this.hide.Add(tab);
+                }
 
                 sr.Close();
             }
@@ -45,54 +58,62 @@ namespace Projet1
             }
         }
 
-        public void Draw(int size, int startX, int startY)
+        public DrawItem Draw(int x, int y, DrawItem di = null)
         {
-            int y = startY;
-
-            for (int i = 0; i < this.value.Count; i++)
-            {
-                Console.SetCursorPosition(startX, y);
-                if (i%size != 0)
-                {   
-                    for (int j = 0; j < this.value[i].Length; j++)
-                    {
-                        if (j%size != 0)
-                        {
-                            Console.Write(this.value[i][j]);
-                        }
-                    }
-                    Console.WriteLine();
-                    y++;
-                } 
-            }
+            List<ScreenCard> list = new List<ScreenCard>();
+            list.Add(new ScreenCard(x, y, this.value, 1));
+            DrawItem d = new DrawItem(list, di);
+            if (this.value != null) Draws.toDraw.Add(d);
+            return d;
+        }
+        public void Clear(int x, int y)
+        {
+            List<ScreenCard> list = new List<ScreenCard>();
+            list.Add(new ScreenCard(x, y, this.value, 0));
+            if (this.value != null) Draws.toDraw.Add(new DrawItem(list, null));
         }
 
-        public static void Draw(List<string> card, int startX, int startY)
+        public void switchCard(int x, int y, int speed, DrawItem di = null)
         {
-            for (int i = 0; i < card.Count; i++)
+            List<ScreenCard> list = new List<ScreenCard>();
+            if (this.value != null)
             {
-                Console.SetCursorPosition(startX, startY + i);
-                Console.WriteLine(card[i]);
-            }
-        }
-
-        public static void Clear(List<string> card, int startX, int startY)
-        {
-            int maxWidth = GetWidth(card);
-            for (int i = 0; i < card.Count; i++)
-            {
-                Console.SetCursorPosition(startX, startY + i);
-                char[] c = new char[maxWidth];
-                for (int j = 0; j < maxWidth; j++)
-                {
-                    c[j] = ' ';
+                List<string> toRotate = visible == true ? this.value : this.hide;
+                for (int i = 0; i < speed; i++)
+                { 
+                    List<string> rslt = Rotate(Smooth(Resize(toRotate, this.width - i*this.width/speed,this.height)), i+1);
+                    ScreenCard sc = new ScreenCard(x, y, rslt, 1);
+                    list.Add(sc);
                 }
-                Console.Write(c);
+
+                if (this.visible == true)
+                {
+                    toRotate = this.hide;
+                    this.visible = false;
+                }
+                else
+                {
+                    toRotate = this.value;
+                    this.visible = true;
+                }
+
+                for (int i = speed -1 ; i >= 0; i--)
+                {
+                    List<string> rslt = Rotate(Smooth(Resize(toRotate, this.width - i * this.width / speed, this.height)), i + 1, false);
+                    ScreenCard sc = new ScreenCard(x, y, rslt, 1);
+                    list.Add(sc);
+                }
+                List<string> rslts = Rotate(Smooth(Resize(toRotate, this.width, this.height)), 0, false);
+                ScreenCard s = new ScreenCard(x, y, rslts, 1);
+                list.Add(s);
+
+                Draws.toDraw.Add(new DrawItem(list, di));
 
             }
+            
         }
 
-        public static List<string> Rotate(List<string> card, int rotation)
+        public static List<string> Rotate(List<string> card, int rotation, bool clockwise = true)
         {
             int maxWidth = GetWidth(card);
 
@@ -108,6 +129,7 @@ namespace Projet1
                 {
                     float coefY = ((float)i - (float)card.Count / 2) / ((float)card.Count / 2);
                     float coefX = -((float)j - (float)card[i].Length / 2) / ((float)card[i].Length / 2);
+                    coefX = clockwise == true ? coefX : -coefX;
                     tab[(int)(y + (rotation * coefY * coefX)), x] = card[i][j] == ' ' ? 'é' : card[i][j];    
                     x++;    
                 }

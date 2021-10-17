@@ -12,13 +12,17 @@ namespace Projet1
         {
 
             Config.initiate();
+            Draws.Run();
             
             int oldX = -1;
             int oldY = -1;
-            
+
             //ConsoleListener.run();
-            
-            Map m = new Map();
+            Card c = new Card(0, "1");
+            Card cs = new Card(1, "1");
+            Card ccs = new Card(2, "1");
+
+            Map m = new Map(new Card[] {c, cs, ccs});
             m.Draw();
             Console.ReadKey();
             Console.ReadKey();
