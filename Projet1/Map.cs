@@ -28,22 +28,22 @@ namespace Projet1
             Console.ReadKey();
             for (int i = 0; i < cards.Count; i++)
             {
-                cards[i].Item1.switchCard(100 * i, 0, 10, dd[i]);
+                cards[i].Item1.switchCard(100 * i, 0, (i + 1) * 3, dd[i]);
             }
             Console.ReadKey();
             for (int i = 0; i < cards.Count; i++)
             {
-                cards[i].Item1.switchCard(100 * i, 0, 10, dd[i]);
+                cards[i].Item1.switchCard(100 * i, 0, (i + 1) * 3, dd[i]);
             }
             Console.ReadKey();
             for (int i = 0; i < cards.Count; i++)
             {
-                cards[i].Item1.switchCard(100 * i, 0, 10, dd[i]);
+                cards[i].Item1.switchCard(100 * i, 0, (i + 1) * 3, dd[i]);
             }
             Console.ReadKey();
             for (int i = 0; i < cards.Count; i++)
             {
-                cards[i].Item1.switchCard(100 * i, 0, 10, dd[i]);
+                cards[i].Item1.switchCard(100 * i, 0, (i+1) * 3, dd[i]);
             }
         }
     }
