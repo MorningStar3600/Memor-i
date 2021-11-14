@@ -30,11 +30,11 @@ namespace Projet1
                 {
                     for (int i = 0; i < toDraw.Count; i++)
                     {
-                        toDraw[i].Draw();
+                        if (toDraw[i] != null) toDraw[i].Draw();
                     }
                 }
 
-                //Thread.Sleep(1);
+                //Thread.Sleep(1000);
             }
         }
     }

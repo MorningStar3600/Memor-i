@@ -13,12 +13,15 @@ namespace Projet1
         List<string> card { get; }
         int state { get; }
 
-        public ScreenCard(int x, int y, List<string> card, int state = 1)
+        ConsoleColor c { get; }
+
+        public ScreenCard(ConsoleColor c, int x, int y, List<string> card, int state = 1)
         {
             this.x = x;
             this.y = y;
             this.card = card;
             this.state = state;
+            this.c = c;
         }
 
         public void Draw()
@@ -34,8 +37,9 @@ namespace Projet1
             {
                 for (int i = 0; i < card.Count; i++)
                 {
+                    Console.ForegroundColor = c; 
                     Console.SetCursorPosition(x, y + i);
-                    Console.WriteLine(card[i]);
+                    Console.Write(card[i]);
                 }
             } 
         }
