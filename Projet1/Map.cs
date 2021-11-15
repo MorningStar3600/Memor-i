@@ -23,7 +23,7 @@ namespace Projet1
             DrawItem[] dd = new DrawItem[cards.Count];
             for (int i = 0; i < cards.Count; i++)
             {
-                dd[i] = cards[i].Item1.switchVisibility(10);
+                cards[i].Item1.switchVisibility(10);
                
             }
             Console.ReadKey();

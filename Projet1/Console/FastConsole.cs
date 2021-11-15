@@ -66,32 +66,32 @@ namespace Projet1
         [STAThread]
         public static void Write(CharInfo[] buf, int x, int y, int width, int height)
         {
+            
             SafeFileHandle h = CreateFile("CONOUT$", 0x40000000, 2, IntPtr.Zero, FileMode.Open, 0, IntPtr.Zero);
             
             
             if (!h.IsInvalid)
-            {;
+            {
+                
+                
                 SmallRect rect = new SmallRect() { Left = (short)x, Top = (short)y, Right = (short)(x+width), Bottom = (short)(y+height) };
 
-                Random r = new Random();
-                for (int i = 0; i < buf.Length; ++i)
+                //Random r = new Random();
+                /*for (int i = 0; i < buf.Length; ++i)
                 {
                     buf[i].Attributes = (short)(r.Next(0,15) | (r.Next(0,15) << 4));
                     buf[i].Char.UnicodeChar = r.Next(0,9).ToString().ToCharArray()[0];
-                }
+                }*/
 
                 bool b = WriteConsoleOutputW(h, buf,
                     new Coord() {X = (short)width, Y = (short)height},
                     new Coord() { X = (short)x, Y = (short)y },
                     ref rect);
-                Thread.Sleep(10);
-                
                 
                     
                 
             }
             h.Close();
-            Console.ReadKey();
         }
     }
 }

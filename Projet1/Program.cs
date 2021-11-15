@@ -12,35 +12,15 @@ namespace Projet1
         public static CardManager cm;
         public static void Main(string[] args)
         {
-            ConsoleManager.SetCurrentFont("Consolas", 20);
+            ConsoleManager.SetCurrentFont("Consolas", 8);
             Config.initiate();
-            
-            //Draws.Run();
-            
-            int oldX = -1;
-            int oldY = -1;
+            Draws.Run();
+            ConsoleListener.run();
 
-            FastConsole.Write(new FastConsole.CharInfo[10000], 0, 0, 100, 100);
-            //ConsoleListener.run();
-            
-            string[] name = {"1","2","1"};
-            cm = new CardManager(name, 3, Hover);
+            string[] name = { "1", "2", "1", "2", "1", "2", "1", "2", };
+            cm = new CardManager(name, 4, Hover);
             
             cm.Draw();
-            Thread.Sleep(1000);
-            ConsoleManager.SetCurrentFont("Consolas", 20);
-            while (false)
-            {
-                if (x != oldX || y != oldY)
-                {
-                    Console.SetCursorPosition(0,0);
-                    Console.WriteLine(x + " ");
-                    Console.WriteLine(y + " ");
-                    oldX = x;
-                    oldY = y;
-                }
-                
-            }
         }
 
         public static void SetColor(int x, int y)

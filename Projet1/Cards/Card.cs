@@ -10,8 +10,12 @@ namespace Projet1
         public int height { get; }
         public int x { get; }
         public int y { get; }
-        public List<string> value { get; } = new List<string>();
-        public List<string> hide { get; } = new List<string>();
+        private List<string> _value { get; } = new List<string>();
+        private List<string> _hide { get; } = new List<string>();
+
+        private List<List<string>> _actualAndFutureValue { get; } = new List<List<string>>();
+        
+        
 
         public bool rectoVerso { get; set; } = true;
         public bool visible { get; set; }
@@ -25,9 +29,9 @@ namespace Projet1
             this.y = y;
             this.width = width;
             this.height = height;
-            this.value = value;
+            this._value = value;
 
-            this.value = Smooth(Resize(this.value, this.width, this.height));
+            this._value = Smooth(Resize(this._value, this.width, this.height));
 
             for (int i = 0; i < this.height; i++)
             {
@@ -37,7 +41,7 @@ namespace Projet1
                     if ((j == 0 || j == this.width - 1) || (i == 0 || i == this.height - 1)) tab += 'X';
                     else tab += ' ';
                 }
-                this.hide.Add(tab);
+                this._hide.Add(tab);
             }
         }
 
@@ -45,14 +49,7 @@ namespace Projet1
         {
             List<ScreenCard> list = new List<ScreenCard>();
             this.color = c;
-            if (this.rectoVerso == true)
-            {
-                ScreenCard s = new ScreenCard(this.color, this.x, this.y, value, 1);
-                list.Add(s);
-            }
-
-            DrawItem d = new DrawItem(list, null);
-            Draws.toDraw.Add(d);
+            Console.WriteLine("hhhhhhhhhhhhhhhhhhhhhhhhh");
         }
 
         public bool IsInCard(int x, int y)
@@ -60,47 +57,56 @@ namespace Projet1
             if (x >= this.x && x <= this.x + this.width && y >= this.y && y <= this.y + this.height) return true;
             return false;
         }
+
+        public List<string> GetActualValue()
+        {
+            if (_actualAndFutureValue.Count > 0)
+            {
+                List<string> rslt = _actualAndFutureValue[0];
+                _actualAndFutureValue.RemoveAt(0);
+                return rslt;
+            }
+            return _value;
+            
+           
+        }
         public DrawItem Draw(DrawItem di = null)
         {
             List<ScreenCard> list = new List<ScreenCard>();
-            list.Add(new ScreenCard(this.color, x, y, this.value, 1));
+            list.Add(new ScreenCard(this.color, x, y, _value, 1));
             DrawItem d = new DrawItem(list, di);
-            if (this.value != null) Draws.toDraw.Add(d);
+            if (_value != null) Draws.toDraw.Add(d);
             return d;
         }
         public void Clear()
         {
             List<ScreenCard> list = new List<ScreenCard>();
-            list.Add(new ScreenCard(this.color, x, y, this.value, 0));
-            if (this.value != null) Draws.toDraw.Add(new DrawItem(list, null));
+            list.Add(new ScreenCard(this.color, x, y, _value, 0));
+            if (_value != null) Draws.toDraw.Add(new DrawItem(list, null));
         }
 
         public DrawItem switchCard(int speed, DrawItem di = null)
         {
             List<ScreenCard> list = new List<ScreenCard>();
-            if (this.value != null)
+            if (this._value != null)
             {
-                List<string> toRotate = rectoVerso == true ? this.value : this.hide;
+                List<string> toRotate = rectoVerso == true ? this._value : this._hide;
                 for (int i = 0; i < speed; i++)
                 {
                     float rotation = (i + 1) / (float)speed;
                     List<string> rslt = Rotate(Smooth(Resize(toRotate, (this.width - i * this.width / speed), this.height)), (int)(rotation*8));
-                    int width = GetWidth(rslt);
-                    int height = rslt.Count;
-                    float factor = (float)height / (float)this.height;
-                    //rslt = Smooth(Resize(rslt, (int)(width * factor), this.height));
                     ScreenCard sc = new ScreenCard(this.color, x, y, rslt, 1);
                     list.Add(sc);
                 }
 
                 if (this.rectoVerso)
                 {
-                    toRotate = this.hide;
+                    toRotate = this._hide;
                     this.rectoVerso = false;
                 }
                 else
                 {
-                    toRotate = this.value;
+                    toRotate = this._value;
                     this.rectoVerso = true;
                 }
 
@@ -123,9 +129,37 @@ namespace Projet1
             
         }
 
-        public DrawItem switchVisibility(int speed, DrawItem di = null)
+        public void switchVisibility(int speed, DrawItem di = null)
         {
-            Console.WriteLine("x:"+x+" y:"+y + "w:"+width+" h:"+height);
+            List<ScreenCard> list = new List<ScreenCard>();
+            if (this.visible)
+            {
+                this.visible = false;
+                List<string> toDraw = this._value;
+                for (int i = 0; i < speed; i++)
+                {
+                    List<string> rslt = Smooth(Resize(Rotate(Smooth(Resize(toDraw, this.width - i * this.width / speed, this.height)), i + 1), this.width, this.height));
+                    _actualAndFutureValue.Add(rslt);
+                }
+                List<string> rslt_ = this._value;
+                _actualAndFutureValue.Add(rslt_);
+
+            }
+            else
+            {
+                this.visible = true;
+                List<string> toDraw = this._value;
+
+                for (int i = speed - 1; i >= 0; i--)
+                {
+                    List<string> rslt = Smooth(Resize(Rotate(Smooth(Resize(toDraw, this.width - i * this.width / speed, this.height)), i + 1, false), this.width, this.height));
+                    _actualAndFutureValue.Add(rslt);
+                }
+                List<string> rslt_ = Rotate(Smooth(Resize(toDraw, this.width, this.height)), 0, false);
+                _actualAndFutureValue.Add(rslt_);
+            }
+            
+            /*Console.WriteLine("x:"+x+" y:"+y + "w:"+width+" h:"+height);
             List<ScreenCard> list = new List<ScreenCard>();
             if (this.visible)
             {
@@ -159,7 +193,7 @@ namespace Projet1
             }
             DrawItem d = new DrawItem(list, di);
             Draws.toDraw.Add(d);
-            return d;
+            return d;*/
         }
 
         public static List<string> Rotate(List<string> card, int rotation, bool clockwise = true)

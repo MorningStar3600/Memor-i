@@ -43,6 +43,10 @@ namespace Projet1
                 this._cards.Add(new Card(i, cardsValues[i], x, y, width, height));
                 Console.WriteLine("x:" + x + " y:" + y + " width:" + width + " height:" + height);
             }
+            for (int i = 0; i < this._cards.Count; i++)
+            {
+                Draws.toDraw.Add(this._cards[i]);
+            }
         }
 
 
@@ -122,7 +126,7 @@ namespace Projet1
         {
             foreach (Card card in _cards)
             {
-                card.switchVisibility(10);
+                card.switchVisibility(20);
             }
         }
 
