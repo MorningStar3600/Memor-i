@@ -70,7 +70,7 @@ namespace Projet1
             int x = c.x;
             int y = c.y;
             
-            List<string> lines = c.GetActualValue();
+            List<ColoredChar[]> lines = c.GetActualValue();
             if (lines != null && lines.Count > 0)
             {
                 char[,] value = new char[lines.Count,Card.GetWidth(lines)];
@@ -86,10 +86,11 @@ namespace Projet1
                     {
                         k = x + j;
                         l = y + i;
-                        if (k >= 0 && k < width && l >= 0 && l < height)
+                        if (k >= 0 && k < width && l >= 0 && l < height && lines[i][j] != null)
                         {
-                            _screenBuffer[l, k] = lines[i][j];
-                            _screenBufferColor[l, k] = (short)c.color;
+                            _screenBuffer[l, k] = lines[i][j].c;
+                            _screenBufferColor[l, k] = (short)lines[i][j].color;
+                            //Console.Write("\r"+c.color);
                         }
                     }
                 }

@@ -41,14 +41,13 @@
   <ItemGroup>
     <Compile Include="Cards\Card.cs" />
     <Compile Include="Cards\CardManager.cs" />
-    <Compile Include="Cards\ScreenCard.cs" />
+    <Compile Include="Class1.cs" />
+    <Compile Include="ColoredChar.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Console\FastConsole.cs" />
     <Compile Include="Console\ConsoleListener.cs" />
     <Compile Include="Console\ConsoleManager.cs" />
     <Compile Include="Draw\Draw.cs" />
-    <Compile Include="Draw\DrawItem.cs" />
-    <Compile Include="Map.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

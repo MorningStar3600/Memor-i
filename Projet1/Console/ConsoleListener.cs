@@ -33,7 +33,10 @@ namespace Projet1 {
                     switch (record.EventType) {
                         case NativeMethods.MouseEvent:
                         {
-                            Program.cm.EventHandling(record.MouseEvent.dwMousePosition.X, record.MouseEvent.dwMousePosition.Y, Math.Abs(1-record.MouseEvent.dwEventFlags));
+                            if (Program.cm != null)
+                            {
+                                Program.cm.EventHandling(record.MouseEvent.dwMousePosition.X, record.MouseEvent.dwMousePosition.Y, Math.Abs(1 - record.MouseEvent.dwEventFlags));
+                            }
 
                             /**Console.WriteLine("Mouse event");
                             Console.WriteLine(string.Format("    X ...............:   {0,4:0}  ", record.MouseEvent.dwMousePosition.X));

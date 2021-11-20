@@ -12,13 +12,13 @@ namespace Projet1
         public static CardManager cm;
         public static void Main(string[] args)
         {
-            ConsoleManager.SetCurrentFont("Consolas", 8);
+            ConsoleManager.SetCurrentFont("Consolas",10);
             Config.initiate();
             Draws.Run();
             ConsoleListener.run();
 
-            string[] name = { "1", "2", "1", "2", "1", "2", "1", "2", };
-            cm = new CardManager(name, 4, Hover);
+            string[] name = { "3" };
+            cm = new CardManager(name, 5, Hover);
             
             cm.Draw();
         }
@@ -36,7 +36,7 @@ namespace Projet1
         {
             if (eventId == 1)
             {
-                cm.GetCards()[cardId].switchCard(1);
+                //cm.GetCards()[cardId].switchCard(1);
                 
             }
         }

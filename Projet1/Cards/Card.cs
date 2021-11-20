@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 namespace Projet1
 {
@@ -10,6 +11,11 @@ namespace Projet1
         public int height { get; }
         public int x { get; }
         public int y { get; }
+
+        List<ColoredChar[]> value { get; } = new List<ColoredChar[]>();
+        List<ColoredChar[]> hide { get; } = new List<ColoredChar[]>();
+        private List<List<ColoredChar[]>> actualAndFutureValue { get; } = new List<List<ColoredChar[]>>();
+
         private List<string> _value { get; } = new List<string>();
         private List<string> _hide { get; } = new List<string>();
 
@@ -22,34 +28,35 @@ namespace Projet1
         public ConsoleColor color { get; set; } = ConsoleColor.White;
 
 
-        public Card(int id, List<string> value, int x, int y, int width, int height)
+        public Card(int id, List<ColoredChar[]> value, int x, int y, int width, int height)
         {
             this.id = id;
             this.x = x;
             this.y = y;
             this.width = width;
             this.height = height;
-            this._value = value;
-
-            this._value = Smooth(Resize(this._value, this.width, this.height));
+            this.value = value;
+            Console.Write(value[0][0]);
+            this.value = Smooth(Resize(this.value, this.width, this.height));
+            Console.Write(value[0][0]);
 
             for (int i = 0; i < this.height; i++)
             {
-                string tab = "";
+                ColoredChar[] line = new ColoredChar[this.width];
                 for (int j = 0; j < this.width; j++)
                 {
-                    if ((j == 0 || j == this.width - 1) || (i == 0 || i == this.height - 1)) tab += 'X';
-                    else tab += ' ';
+                    if ((j == 0 || j == this.width - 1) || (i == 0 || i == this.height - 1)) line[i] = new ColoredChar('X', ConsoleColor.White);
+                    else line[i] = new ColoredChar(' ', ConsoleColor.White);
                 }
-                this._hide.Add(tab);
+                this.hide.Add(line);
             }
         }
 
         public void SetColor(ConsoleColor c)
         {
-            List<ScreenCard> list = new List<ScreenCard>();
+            //List<ScreenCard> list = new List<ScreenCard>();
             this.color = c;
-            Console.WriteLine("hhhhhhhhhhhhhhhhhhhhhhhhh");
+            //Console.WriteLine("hhhhhhhhhhhhhhhhhhhhhhhhh");
         }
 
         public bool IsInCard(int x, int y)
@@ -58,34 +65,34 @@ namespace Projet1
             return false;
         }
 
-        public List<string> GetActualValue()
+        public List<ColoredChar[]> GetActualValue()
         {
             if (_actualAndFutureValue.Count > 0)
             {
-                List<string> rslt = _actualAndFutureValue[0];
-                _actualAndFutureValue.RemoveAt(0);
+                List<ColoredChar[]> rslt = actualAndFutureValue[0];
+                actualAndFutureValue.RemoveAt(0);
                 return rslt;
             }
-            return _value;
+            return value;
             
            
         }
-        public DrawItem Draw(DrawItem di = null)
-        {
-            List<ScreenCard> list = new List<ScreenCard>();
-            list.Add(new ScreenCard(this.color, x, y, _value, 1));
-            DrawItem d = new DrawItem(list, di);
-            if (_value != null) Draws.toDraw.Add(d);
-            return d;
-        }
-        public void Clear()
-        {
-            List<ScreenCard> list = new List<ScreenCard>();
-            list.Add(new ScreenCard(this.color, x, y, _value, 0));
-            if (_value != null) Draws.toDraw.Add(new DrawItem(list, null));
-        }
+        //public DrawItem Draw(DrawItem di = null)
+        //{
+        //    List<ScreenCard> list = new List<ScreenCard>();
+        //    list.Add(new ScreenCard(this.color, x, y, _value, 1));
+        //    DrawItem d = new DrawItem(list, di);
+        //    if (_value != null) Draws.toDraw.Add(d);
+        //    return d;
+        //}
+        //public void Clear()
+        //{
+        //    List<ScreenCard> list = new List<ScreenCard>();
+        //    list.Add(new ScreenCard(this.color, x, y, _value, 0));
+        //    if (_value != null) Draws.toDraw.Add(new DrawItem(list, null));
+        //}
 
-        public DrawItem switchCard(int speed, DrawItem di = null)
+        /*public DrawItem switchCard(int speed, DrawItem di = null)
         {
             List<ScreenCard> list = new List<ScreenCard>();
             if (this._value != null)
@@ -127,36 +134,35 @@ namespace Projet1
             }
             return null;
             
-        }
+        }*/
 
-        public void switchVisibility(int speed, DrawItem di = null)
+        public void switchVisibility(int speed)
         {
-            List<ScreenCard> list = new List<ScreenCard>();
             if (this.visible)
             {
                 this.visible = false;
-                List<string> toDraw = this._value;
+                List<ColoredChar[]> toDraw = this.value;
                 for (int i = 0; i < speed; i++)
                 {
-                    List<string> rslt = Smooth(Resize(Rotate(Smooth(Resize(toDraw, this.width - i * this.width / speed, this.height)), i + 1), this.width, this.height));
-                    _actualAndFutureValue.Add(rslt);
+                    List<ColoredChar[]> rslt = Smooth(Resize(Rotate(Smooth(Resize(toDraw, this.width - i * this.width / speed, this.height)), i + 1), this.width, this.height));
+                    actualAndFutureValue.Add(rslt);
                 }
-                List<string> rslt_ = this._value;
-                _actualAndFutureValue.Add(rslt_);
+                List<ColoredChar[]> rslt_ = this.value;
+                actualAndFutureValue.Add(rslt_);
 
             }
             else
             {
                 this.visible = true;
-                List<string> toDraw = this._value;
+                List<ColoredChar[]> toDraw = this.value;
 
                 for (int i = speed - 1; i >= 0; i--)
                 {
-                    List<string> rslt = Smooth(Resize(Rotate(Smooth(Resize(toDraw, this.width - i * this.width / speed, this.height)), i + 1, false), this.width, this.height));
-                    _actualAndFutureValue.Add(rslt);
+                    List<ColoredChar[]> rslt = Smooth(Resize(Rotate(Smooth(Resize(toDraw, this.width - i * this.width / speed, this.height)), i + 1, false), this.width, this.height));
+                    actualAndFutureValue.Add(rslt);
                 }
-                List<string> rslt_ = Rotate(Smooth(Resize(toDraw, this.width, this.height)), 0, false);
-                _actualAndFutureValue.Add(rslt_);
+                List<ColoredChar[]> rslt_ = Rotate(Smooth(Resize(toDraw, this.width, this.height)), 0, false);
+                actualAndFutureValue.Add(rslt_);
             }
             
             /*Console.WriteLine("x:"+x+" y:"+y + "w:"+width+" h:"+height);
@@ -196,11 +202,11 @@ namespace Projet1
             return d;*/
         }
 
-        public static List<string> Rotate(List<string> card, int rotation, bool clockwise = true)
+        public static List<ColoredChar[]> Rotate(List<ColoredChar[]> card, int rotation, bool clockwise = true)
         {
             int maxWidth = GetWidth(card);
 
-            char[,] tab = new char[card.Count,maxWidth];
+            ColoredChar[,] tab = new ColoredChar[card.Count,maxWidth];
 
             int y = rotation;
             int x;
@@ -213,56 +219,88 @@ namespace Projet1
                     float coefY = -(i - (float)card.Count / 2) / ((float)card.Count / 2);
                     float coefX = j/(float)card[i].Length;
                     int finalY = (int)(i+(rotation * coefY * coefX));
+                    finalY = finalY <= tab.GetLength(0) - 1 ? finalY : tab.GetLength(0)-1;
                     int finalX = x;
-                    tab[finalY, finalX] = card[i][j] == ' ' ? 'é' : card[i][j];    
+                    //Debug.WriteLine("hhhhhhhhhhhhhhhhhhhhhhhhhhh");
+                    //Debug.Write(tab.GetLength(0));
+                    //Console.ReadKey();
+                    //Console.WriteLine(tab[finalY, 0]);
+                    tab[finalY, finalX] = card[i][j].c == ' ' ? new ColoredChar('é', card[i][j].color) : new ColoredChar(card[i][j].c, card[i][j].color);    
                     x++;    
                 }
                 y++;
             }
-            List<string> rslt = new List<string>();
+            List<ColoredChar[]> rslt = new List<ColoredChar[]>();
 
             for (int i = 0; i < tab.GetLength(0); i++)
             {
-                string s = "";
+                ColoredChar[] s = new ColoredChar[tab.GetLength(1)];
                 for (int j = 0; j < tab.GetLength(1); j++)
                 {
-                    s += tab[i, j] == 'é' ? ' ' : tab[i, j];
+                    s[i] = tab[i, j].c == 'é' ? new ColoredChar(' ', tab[i,j].color) : new ColoredChar(tab[i,j].c, tab[i,j].color);
                 }
                 rslt.Add(s);
             }
             return rslt;
         }
 
-        public static char[,] Resize(List<string> card, int width, int height)
+        public static ColoredChar[,] Resize(List<ColoredChar[]> card, int width, int height)
         {
-            int maxWidth = GetWidth(card);
-            int maxHeight = card.Count;
-            char[,] tab = new char[height,width];
+            float maxWidth = GetWidth(card);
+            float maxHeight = card.Count;
+            ColoredChar[,] tab = new ColoredChar[height,width];
             if (card.Count > 0 && width > 0 && height > 0)
             {
                 for (int i = 0; i < card.Count; i++)
                 {
                     for (int j = 0; j < card[i].Length; j++)
                     {
-                        tab[(int)((float)i / maxHeight * height), (int)((float)j / maxWidth * width)] = card[i][j] == ' ' ? 'é' : card[i][j];
+                        //Console.Write(card[i][j]);
+                        //Console.ReadKey();
+                        if (card[i][j] != null)
+                        {
+                            tab[(int)(i / maxHeight * height), (int)(j / maxWidth * width)] =
+                            card[i][j].c == ' ' ? new ColoredChar('é', card[i][j].color) : new ColoredChar(card[i][j].c, card[i][j].color);
+                        }
+                        else
+                        {
+                            Console.Write("fuck");
+                        }
+                        
                     }
                 }
+
+                for (int i = 0; i < height; i++)
+                {
+                    for (int j = 0; j < width; j++)
+                    {
+                        if (tab[i,j] == null)
+                        {
+                            tab[i, j] = new ColoredChar('é', ConsoleColor.White);
+                        }
+                    }
+                }
+
+
             }
+            
 
             
 
             return tab;
         }
 
-        public static List<string> Smooth(char[,] tab)
+        public static List<ColoredChar[]> Smooth(ColoredChar[,] tab)
         {
+            //Console.Write(tab[0,0]);
+            //Console.ReadKey();
             Random rdm = new Random();
 
             for (int i = 0; i < tab.GetLength(0); i++)
             {
                 for (int j = 0; j < tab.GetLength(1); j++)
                 {
-                    if (tab[i,j]== '\0')
+                    if (tab[i,j].c== '\0')
                     {
                         int value = rdm.Next(0, 2);
                         if (i > 0 && i < tab.GetLength(0)-1)
@@ -277,27 +315,26 @@ namespace Projet1
                         {
                             tab[i, j] = tab[i - 1, j];
                         }
-                        
                     }
                 }
             }
 
 
-            List<string> rslt = new List<string>();
+            List<ColoredChar[]> rslt = new List<ColoredChar[]>();
 
             for (int i = 0; i < tab.GetLength(0); i++)
             {
-                string s = "";
+                ColoredChar[] s = new ColoredChar[tab.GetLength(1)];
                 for (int j = 0; j < tab.GetLength(1); j++)
                 {
-                    s += tab[i, j] == 'é' ? ' ' : tab[i,j];
+                    s[i] = tab[i, j].c == 'é' ? new ColoredChar(' ', tab[i,j].color) : new ColoredChar(tab[i,j].c, tab[i,j].color);
                 }
                 rslt.Add(s);
             }
             return rslt;
         }
 
-        public static int GetWidth(List<string> card)
+        public static int GetWidth(List<ColoredChar[]> card)
         {
             int lengthMax = 0;
             for (int i = 0; i < card.Count; i++)
