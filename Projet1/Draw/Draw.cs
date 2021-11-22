@@ -10,6 +10,7 @@ namespace Projet1
         static private readonly Thread _thread;
         private static char[,] _screenBuffer;
         private static short[,] _screenBufferColor;
+        private static short[,] _screenBufferBColor;
 
 
         private static int width;
@@ -41,6 +42,7 @@ namespace Projet1
 
                 _screenBuffer = new char[height, width];
                 _screenBufferColor = new short[height, width];
+                _screenBufferBColor = new short[height, width];
                 draw = false;
                 for (int i = 0; i < toDraw.Count; i++)
                 {
@@ -79,7 +81,6 @@ namespace Projet1
 
                 int length0 = value.GetLength(0);
                 int length1 = value.GetLength(1);
-
                 for (int i = 0; i < length0; i++)
                 {
                     for (int j = 0; j < length1; j++)
@@ -90,7 +91,8 @@ namespace Projet1
                         {
                             _screenBuffer[l, k] = lines[i][j].c;
                             _screenBufferColor[l, k] = (short)lines[i][j].color;
-                            //Console.Write("\r"+c.color);
+                            _screenBufferBColor[l, k] = (short)lines[i][j].bColor;
+                            
                         }
                     }
                 }
@@ -112,7 +114,7 @@ namespace Projet1
                 for (int j = 0; j < length1; j++)
                 {
                     buffer[index].Char.UnicodeChar = _screenBuffer[i, j];
-                    buffer[index].Attributes = (short)15;
+                    buffer[index].Attributes = (short)(_screenBufferColor[i,j] | (_screenBufferBColor[i,j]<<4));
                     index++;
                 }
             }

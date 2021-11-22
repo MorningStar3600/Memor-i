@@ -37,8 +37,9 @@ namespace Projet1
 
                 ComputeCardTransform(nbrCardsInRow, normalize, cardsMaxLineLength, i, maxCardHeight, maxCardWidth, cardsValues, NormalizedCardHeight, nbrCardsInColumn, out var width, out var height, out var x,
                     out var y);
+
+
                 this._cards.Add(new Card(i, cardsValues[i], x, y, width, height));
-                Console.WriteLine("x:" + x + " y:" + y + " width:" + width + " height:" + height);
             }
             for (int i = 0; i < this._cards.Count; i++)
             {
@@ -123,7 +124,7 @@ namespace Projet1
         {
             foreach (Card card in _cards)
             {
-                card.switchVisibility(20);
+                card.switchVisibility(2);
             }
         }
 
@@ -166,15 +167,37 @@ namespace Projet1
                     line = sr.ReadLine();
                     if (line == null) break;
                     
-                    string[] chars = line.Split('');
-                    ColoredChar[] rslt = new ColoredChar[chars.Length-2];
-                    for (int j = 1; j < rslt.Length+1; j++)
+                    string[] coloredPixels = line.Split('');
+                    List<ColoredChar> rslt = new List<ColoredChar>();
+                    for (int j = 1; j < coloredPixels.Length-1; j++)
                     {
-                        rslt[j-1] = new ColoredChar('X', ConsoleColor.White);
-                        
+                        string pixels = coloredPixels[j].Split('m')[1];
+
+                        string[] colors = coloredPixels[j].Split('m')[0].Split('[')[1].Split(';');
+                        string value1;
+                        string value2;
+                        if (colors.Length == 4)
+                        {
+                            value1 = colors[1];
+                            value2 = colors[3];
+                        }
+                        else
+                        {
+                            value1 = colors[0];
+                            value2 = colors[2];
+                        }
+                        for (int k = 0; k < pixels.Length; k++)
+                        {
+                            rslt.Add(new ColoredChar(pixels[k], ColoredChar.GetColor(colors[0], colors[2]), ColoredChar.GetColor(value1, value2)));
+                        }
                     }
                     if (line.Length > maxWidth) maxWidth = line.Length;
-                    cardValue.Add(rslt);
+                    ColoredChar[] arr = new ColoredChar[rslt.Count];
+                    for (int k = 0; k < rslt.Count; k++)
+                    {
+                        arr[k] = rslt[k];
+                    }
+                    cardValue.Add(arr);
                 }
                 sr.Close();
             }

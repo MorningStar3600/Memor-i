@@ -36,9 +36,7 @@ namespace Projet1
             this.width = width;
             this.height = height;
             this.value = value;
-            Console.Write(value[0][0]);
             this.value = Smooth(Resize(this.value, this.width, this.height));
-            Console.Write(value[0][0]);
 
             for (int i = 0; i < this.height; i++)
             {
@@ -225,19 +223,28 @@ namespace Projet1
                     //Debug.Write(tab.GetLength(0));
                     //Console.ReadKey();
                     //Console.WriteLine(tab[finalY, 0]);
-                    tab[finalY, finalX] = card[i][j].c == ' ' ? new ColoredChar('é', card[i][j].color) : new ColoredChar(card[i][j].c, card[i][j].color);    
+                    tab[finalY, finalX] = card[i][j].c == ' ' ? new ColoredChar('é', card[i][j].color, card[i][j].bColor) : new ColoredChar(card[i][j].c, card[i][j].color, card[i][j].bColor);    
                     x++;    
                 }
                 y++;
             }
             List<ColoredChar[]> rslt = new List<ColoredChar[]>();
-
             for (int i = 0; i < tab.GetLength(0); i++)
             {
                 ColoredChar[] s = new ColoredChar[tab.GetLength(1)];
                 for (int j = 0; j < tab.GetLength(1); j++)
                 {
-                    s[i] = tab[i, j].c == 'é' ? new ColoredChar(' ', tab[i,j].color) : new ColoredChar(tab[i,j].c, tab[i,j].color);
+                    
+                    if (tab[i,j] == null)
+                    {
+                        s[j] = new ColoredChar(' ', ConsoleColor.White);
+                    }
+                    else
+                    {
+                        s[j] = tab[i, j].c == 'é' ? new ColoredChar(' ', tab[i, j].color, tab[i,j].bColor) : new ColoredChar(tab[i, j].c, tab[i, j].color, tab[i,j].bColor);
+                    }
+
+                    
                 }
                 rslt.Add(s);
             }
@@ -260,7 +267,7 @@ namespace Projet1
                         if (card[i][j] != null)
                         {
                             tab[(int)(i / maxHeight * height), (int)(j / maxWidth * width)] =
-                            card[i][j].c == ' ' ? new ColoredChar('é', card[i][j].color) : new ColoredChar(card[i][j].c, card[i][j].color);
+                            card[i][j].c == ' ' ? new ColoredChar('é', card[i][j].color, card[i][j].bColor) : new ColoredChar(card[i][j].c, card[i][j].color, card[i][j].bColor);
                         }
                         else
                         {
@@ -327,7 +334,7 @@ namespace Projet1
                 ColoredChar[] s = new ColoredChar[tab.GetLength(1)];
                 for (int j = 0; j < tab.GetLength(1); j++)
                 {
-                    s[i] = tab[i, j].c == 'é' ? new ColoredChar(' ', tab[i,j].color) : new ColoredChar(tab[i,j].c, tab[i,j].color);
+                    s[j] = tab[i, j].c == 'é' ? new ColoredChar(' ', tab[i,j].color, tab[i,j].bColor) : new ColoredChar(tab[i,j].c, tab[i,j].color, tab[i,j].bColor);
                 }
                 rslt.Add(s);
             }

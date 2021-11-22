@@ -13,12 +13,12 @@ namespace Projet1
         public static void Main(string[] args)
         {
             ConsoleManager.SetCurrentFont("Consolas",10);
-            Config.initiate();
+            ConsoleManager.SetFullScreen();
             Draws.Run();
             ConsoleListener.run();
 
-            string[] name = { "3" };
-            cm = new CardManager(name, 5, Hover);
+            string[] name = { "99","8", "10" };
+            cm = new CardManager(name, 3, Hover);
             
             cm.Draw();
         }
