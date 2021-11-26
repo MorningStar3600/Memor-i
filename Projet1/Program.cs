@@ -14,11 +14,11 @@ namespace Projet1
         {
             ConsoleManager.SetCurrentFont("Consolas",10);
             ConsoleManager.SetFullScreen();
-            Draws.Run();
+            Draws.Run();    
             ConsoleListener.run();
 
-            string[] name = { "99","8", "10" };
-            cm = new CardManager(name, 3, Hover);
+            string[] name = {"1","2"};
+            cm = new CardManager(name, 4, Hover);
             
             cm.Draw();
         }

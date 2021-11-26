@@ -19,9 +19,9 @@ namespace Projet1
             this._cards = new List<Card>();
             this._eventManager = eventManager;
 
-            int maxCardWidth = (Console.WindowWidth / nbrCardsInRow) - nbrCardsInRow - 1;
+            int maxCardWidth = (Console.WindowWidth / nbrCardsInRow) - 3;
             int nbrCardsInColumn = (int) Math.Ceiling((double) cards.Length / (double) nbrCardsInRow);
-            int maxCardHeight = (Console.WindowHeight / nbrCardsInColumn) - nbrCardsInColumn - 1;
+            int maxCardHeight = (Console.WindowHeight / nbrCardsInColumn)-1;
             int minimalCardHeight = cardsValues[0].Count;
             for (int i = 1; i < cards.Length; i++)
             {
@@ -34,7 +34,6 @@ namespace Projet1
             int NormalizedCardHeight = Math.Min(maxCardHeight, minimalCardHeight);
             for (int i = 0; i < cards.Length; i++)
             {
-
                 ComputeCardTransform(nbrCardsInRow, normalize, cardsMaxLineLength, i, maxCardHeight, maxCardWidth, cardsValues, NormalizedCardHeight, nbrCardsInColumn, out var width, out var height, out var x,
                     out var y);
 
@@ -104,11 +103,45 @@ namespace Projet1
             }
             else
             {
+                /*double widthRatio = cardsMaxLineLength[i] / (double)maxCardWidth;
+                double heightRatio = cardsValues[i].Count / (double)maxCardHeight;
+                
+                Console.Write("\r    " + widthRatio + " " + heightRatio);
+                Console.ReadKey();
+                if (widthRatio > heightRatio)
+                {
+                    if (widthRatio > 1)
+                    {
+                        double ratio = maxCardWidth / (double)cardsMaxLineLength[i];
+                        width = maxCardWidth;
+                        height = (int)(cardsValues[i].Count * ratio);
+                    }
+                    else
+                    {
+                        width = cardsMaxLineLength[i];
+                        height = cardsValues[i].Count;
+                    }
+                }
+                else
+                {
+                    if (heightRatio > 1)
+                    {
+                        double ratio = maxCardHeight / (double)cardsValues[i].Count;
+                        height = maxCardHeight;
+                        width = (int)(cardsMaxLineLength[i] * ratio);
+                    }
+                    else
+                    {
+                        height = cardsValues[i].Count;
+                        width = cardsMaxLineLength[i];
+                    }
+                }*/
                 height = cardsValues[i].Count > NormalizedCardHeight ? NormalizedCardHeight : cardsValues[i].Count;
                 double ratio = height / (double) cardsValues[i].Count;
                 width = cardsMaxLineLength[i] > maxCardWidth
                     ? cardsMaxLineLength[i] * ratio > maxCardWidth ? maxCardWidth : (int) (cardsMaxLineLength[i] * ratio)
                     : cardsMaxLineLength[i];
+                
             }
 
 
