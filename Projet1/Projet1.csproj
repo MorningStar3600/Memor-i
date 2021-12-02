@@ -40,7 +40,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cards\Card.cs" />
+    <Compile Include="Cards\CardLoader.cs" />
     <Compile Include="Cards\CardManager.cs" />
+    <Compile Include="Cards\ProgressBar.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="ColoredChar.cs" />
     <Compile Include="Config.cs" />

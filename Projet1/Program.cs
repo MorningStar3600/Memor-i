@@ -15,10 +15,10 @@ namespace Projet1
             ConsoleManager.SetCurrentFont("Consolas",10);
             ConsoleManager.SetFullScreen();
             Draws.Run();    
-            ConsoleListener.run();
+            //ConsoleListener.run();
 
-            string[] name = {"1","2"};
-            cm = new CardManager(name, 4, Hover);
+            string[] name = {"1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"};
+            cm = new CardManager(name, 5, Hover);
             
             cm.Draw();
         }

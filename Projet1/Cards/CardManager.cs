@@ -1,52 +1,64 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.AccessControl;
+using System.Threading;
 
 namespace Projet1
 {
     class CardManager
     {
-        private List<Card> _cards;
+        private List<Card> _cards = new List<Card>();
         private int _actualCard = -1;
         private Action<CardManager, int, int> _eventManager;
 
         public CardManager(string[] cards, int nbrCardsInRow, Action<CardManager, int, int> eventManager, bool normalize = true)
         {
-            List<List<ColoredChar[]>> cardsValues = new List<List<ColoredChar[]>>();
+            List<List<ColoredChar[]>> cardValues = new List<List<ColoredChar[]>>();
 
-            List<int> cardsMaxLineLength = new List<int>();
-            LoadCards(cards, cardsMaxLineLength, cardsValues);
-            this._cards = new List<Card>();
-            this._eventManager = eventManager;
-
+            int[] cardsMaxLineLength = new int[cards.Length];
+            
             int maxCardWidth = (Console.WindowWidth / nbrCardsInRow) - 3;
             int nbrCardsInColumn = (int) Math.Ceiling((double) cards.Length / (double) nbrCardsInRow);
             int maxCardHeight = (Console.WindowHeight / nbrCardsInColumn)-1;
-            int minimalCardHeight = cardsValues[0].Count;
-            for (int i = 1; i < cards.Length; i++)
-            {
-                if (cardsValues[i].Count < minimalCardHeight)
-                {
-                    minimalCardHeight = cardsValues[i].Count;
-                }
-            }
             
-            int NormalizedCardHeight = Math.Min(maxCardHeight, minimalCardHeight);
+            ProgressBar progressBar = new ProgressBar(Console.WindowWidth/2, Console.WindowHeight/2, cards.Length);
+            
             for (int i = 0; i < cards.Length; i++)
             {
-                ComputeCardTransform(nbrCardsInRow, normalize, cardsMaxLineLength, i, maxCardHeight, maxCardWidth, cardsValues, NormalizedCardHeight, nbrCardsInColumn, out var width, out var height, out var x,
-                    out var y);
-
-
-                this._cards.Add(new Card(i, cardsValues[i], x, y, width, height));
+                int cWidth = CardLoader.Load(cards[i], cardValues);
+                int x = 0;
+                int y = 0;
+                int width = 0;
+                int height = 0;
+                ComputeCardTransform(nbrCardsInRow, false, cWidth, cardValues[0].Count, i, maxCardHeight, maxCardWidth, out x, out y, out width, out height);
+                this._cards.Add(new Card(i,cardValues, x, y, width, height));
+                progressBar.Update();
             }
-            for (int i = 0; i < this._cards.Count; i++)
+
+            for (int i = 0; i < cards.Length; i++)
             {
                 Draws.toDraw.Add(this._cards[i]);
+                Thread.Sleep(20);
             }
         }
 
+        private void ComputeCardTransform(int nbrCardInRow, bool normalize, int cardWidth, int cardHeight, int index, int maxCardHeight, int maxCardWidth, out int x, out int y, out int width, out int height)
+        {
+            height = cardHeight > maxCardHeight ? maxCardHeight : cardHeight;
+            double ratio2 = height / (double) cardHeight;
+            width = cardWidth > maxCardWidth
+                ? cardWidth * ratio2 > maxCardWidth ? maxCardWidth : (int) (cardWidth * ratio2)
+                : cardWidth;
+            
+            y = (index / nbrCardInRow + 1) * maxCardHeight - maxCardHeight / 2 - height / 2;
+            
+            int indexInRow = index % nbrCardInRow;
+            x = (indexInRow + 1) * maxCardWidth - maxCardWidth / 2 - width / 2;
 
+            
+        }
+        
         public void EventHandling(int x, int y, int evt)
         {
             int cardIndex = -1;
@@ -76,81 +88,6 @@ namespace Projet1
                 _cards[_actualCard].SetColor(ConsoleColor.White);
                 _actualCard = -1;
             }
-            
-
-        }
-
-        private int ComputeCardTransform(int nbrCardsInRow, bool normalize, List<int> cardsMaxLineLength, int i, int maxCardHeight,
-            int maxCardWidth, List<List<ColoredChar[]>> cardsValues, int NormalizedCardHeight, int nbrCardsInColumn, out int width, out int height, out int x,
-            out int y)
-        {
-            if (normalize == false)
-            {
-                if (cardsMaxLineLength[i] >= maxCardHeight)
-                {
-                    width = cardsMaxLineLength[i] > maxCardWidth ? maxCardWidth : cardsMaxLineLength[i];
-                    double ratio = width / (double) cardsMaxLineLength[i];
-                    height = cardsValues[i].Count > maxCardHeight ? (int) (cardsValues[i].Count * ratio) : cardsValues[i].Count;
-                }
-                else
-                {
-                    height = cardsValues[i].Count > maxCardHeight ? maxCardHeight : cardsValues[i].Count;
-                    double ratio = height / (double) cardsValues[i].Count;
-                    width = cardsMaxLineLength[i] > maxCardWidth
-                        ? (int) (cardsMaxLineLength[i] * ratio)
-                        : cardsMaxLineLength[i];
-                }
-            }
-            else
-            {
-                /*double widthRatio = cardsMaxLineLength[i] / (double)maxCardWidth;
-                double heightRatio = cardsValues[i].Count / (double)maxCardHeight;
-                
-                Console.Write("\r    " + widthRatio + " " + heightRatio);
-                Console.ReadKey();
-                if (widthRatio > heightRatio)
-                {
-                    if (widthRatio > 1)
-                    {
-                        double ratio = maxCardWidth / (double)cardsMaxLineLength[i];
-                        width = maxCardWidth;
-                        height = (int)(cardsValues[i].Count * ratio);
-                    }
-                    else
-                    {
-                        width = cardsMaxLineLength[i];
-                        height = cardsValues[i].Count;
-                    }
-                }
-                else
-                {
-                    if (heightRatio > 1)
-                    {
-                        double ratio = maxCardHeight / (double)cardsValues[i].Count;
-                        height = maxCardHeight;
-                        width = (int)(cardsMaxLineLength[i] * ratio);
-                    }
-                    else
-                    {
-                        height = cardsValues[i].Count;
-                        width = cardsMaxLineLength[i];
-                    }
-                }*/
-                height = cardsValues[i].Count > NormalizedCardHeight ? NormalizedCardHeight : cardsValues[i].Count;
-                double ratio = height / (double) cardsValues[i].Count;
-                width = cardsMaxLineLength[i] > maxCardWidth
-                    ? cardsMaxLineLength[i] * ratio > maxCardWidth ? maxCardWidth : (int) (cardsMaxLineLength[i] * ratio)
-                    : cardsMaxLineLength[i];
-                
-            }
-
-
-            int index = i - nbrCardsInRow * (i / nbrCardsInRow);
-
-            x = (index + 1) * (Console.WindowWidth / nbrCardsInRow) - maxCardWidth / 2 - width / 2;
-
-            y = (i / nbrCardsInRow + 1) * (Console.WindowHeight / nbrCardsInColumn) - maxCardHeight / 2 - height / 2;
-            return width;
         }
 
         public void Draw()
@@ -159,90 +96,6 @@ namespace Projet1
             {
                 card.switchVisibility(2);
             }
-        }
-
-        private void LoadCards(string[] cards, List<int> cardsMaxLineLength, List<List<ColoredChar[]>> cardsValues)
-        {
-            for (int i = 0; i < cards.Length; i++)
-            {
-                List<ColoredChar[]> cardValue = new List<ColoredChar[]>();
-                string path = Directory.GetCurrentDirectory() + "\\card\\";
-                LoadCard(cards, cardsMaxLineLength, cardsValues, path, i, cardValue);
-            }
-        }
-
-        private void LoadCard(string[] cards, List<int> cardsMaxLineLength, List<List<ColoredChar[]>> cardsValues, string path, int i, List<ColoredChar[]> cardValue)
-        {
-            try
-            {
-                var maxWidth = ReadCardFile(cards, path, i, cardValue);
-                cardsMaxLineLength.Add(maxWidth);
-                cardsValues.Add(cardValue);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("The file could not be read:");
-                Console.WriteLine(e.Message);
-            }
-        }
-
-        private int ReadCardFile(string[] cards, string path, int i, List<ColoredChar[]> cardValue)
-        {
-            string line = "";
-            int maxWidth = 0;
-            try
-            {
-                StreamReader sr = new StreamReader(path + cards[i] + ".txt");
-
-                
-                while (line != null)
-                {
-                    line = sr.ReadLine();
-                    if (line == null) break;
-                    
-                    string[] coloredPixels = line.Split('');
-                    List<ColoredChar> rslt = new List<ColoredChar>();
-                    for (int j = 1; j < coloredPixels.Length-1; j++)
-                    {
-                        string pixels = coloredPixels[j].Split('m')[1];
-
-                        string[] colors = coloredPixels[j].Split('m')[0].Split('[')[1].Split(';');
-                        string value1;
-                        string value2;
-                        if (colors.Length == 4)
-                        {
-                            value1 = colors[1];
-                            value2 = colors[3];
-                        }
-                        else
-                        {
-                            value1 = colors[0];
-                            value2 = colors[2];
-                        }
-                        for (int k = 0; k < pixels.Length; k++)
-                        {
-                            rslt.Add(new ColoredChar(pixels[k], ColoredChar.GetColor(colors[0], colors[2]), ColoredChar.GetColor(value1, value2)));
-                        }
-                    }
-                    if (line.Length > maxWidth) maxWidth = line.Length;
-                    ColoredChar[] arr = new ColoredChar[rslt.Count];
-                    for (int k = 0; k < rslt.Count; k++)
-                    {
-                        arr[k] = rslt[k];
-                    }
-                    cardValue.Add(arr);
-                }
-                sr.Close();
-            }
-            catch (FileNotFoundException e)
-            {
-
-            }catch(Exception e)
-            {
-
-            }
-
-            return maxWidth;
         }
 
         public List<Card> GetCards()

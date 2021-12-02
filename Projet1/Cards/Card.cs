@@ -12,7 +12,8 @@ namespace Projet1
         public int x { get; }
         public int y { get; }
 
-        List<ColoredChar[]> value { get; } = new List<ColoredChar[]>();
+        List<List<ColoredChar[]>> values { get; } = new List<List<ColoredChar[]>>();
+        double animationIndex = 0;
         List<ColoredChar[]> hide { get; } = new List<ColoredChar[]>();
         private List<List<ColoredChar[]>> actualAndFutureValue { get; } = new List<List<ColoredChar[]>>();
 
@@ -28,23 +29,27 @@ namespace Projet1
         public ConsoleColor color { get; set; } = ConsoleColor.White;
 
 
-        public Card(int id, List<ColoredChar[]> value, int x, int y, int width, int height)
+        public Card(int id, List<List<ColoredChar[]>> values, int x, int y, int width, int height)
         {
             this.id = id;
             this.x = x;
             this.y = y;
             this.width = width;
             this.height = height;
-            this.value = value;
-            this.value = Smooth(Resize(this.value, this.width, this.height));
+
+            for (int i = 0; i < values.Count; i++)
+            {
+                this.values.Add(Smooth(Resize(values[i], this.width, this.height)));
+            }
+            
 
             for (int i = 0; i < this.height; i++)
             {
                 ColoredChar[] line = new ColoredChar[this.width];
                 for (int j = 0; j < this.width; j++)
                 {
-                    if ((j == 0 || j == this.width - 1) || (i == 0 || i == this.height - 1)) line[i] = new ColoredChar('X', ConsoleColor.White);
-                    else line[i] = new ColoredChar(' ', ConsoleColor.White);
+                    if ((j == 0 || j == this.width - 1) || (i == 0 || i == this.height - 1)) line[j] = new ColoredChar('X', ConsoleColor.White);
+                    else line[j] = new ColoredChar(' ', ConsoleColor.White);
                 }
                 this.hide.Add(line);
             }
@@ -71,7 +76,10 @@ namespace Projet1
                 actualAndFutureValue.RemoveAt(0);
                 return rslt;
             }
-            return value;
+
+            animationIndex += 0.5;
+            if (animationIndex >= values.Count) animationIndex = 0;
+            return values[(int)animationIndex];
             
            
         }
@@ -139,20 +147,20 @@ namespace Projet1
             if (this.visible)
             {
                 this.visible = false;
-                List<ColoredChar[]> toDraw = this.value;
+                List<ColoredChar[]> toDraw = this.values[(int)animationIndex];
                 for (int i = 0; i < speed; i++)
                 {
                     List<ColoredChar[]> rslt = Smooth(Resize(Rotate(Smooth(Resize(toDraw, this.width - i * this.width / speed, this.height)), i + 1), this.width, this.height));
                     actualAndFutureValue.Add(rslt);
                 }
-                List<ColoredChar[]> rslt_ = this.value;
+                List<ColoredChar[]> rslt_ = this.values[(int)animationIndex];
                 actualAndFutureValue.Add(rslt_);
 
             }
             else
             {
                 this.visible = true;
-                List<ColoredChar[]> toDraw = this.value;
+                List<ColoredChar[]> toDraw = this.values[(int)animationIndex];
 
                 for (int i = speed - 1; i >= 0; i--)
                 {

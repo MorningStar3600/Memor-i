@@ -11,6 +11,7 @@ namespace Projet1
         private static char[,] _screenBuffer;
         private static short[,] _screenBufferColor;
         private static short[,] _screenBufferBColor;
+        private static FastConsole.CharInfo[] buffer;
 
 
         private static int width;
@@ -36,13 +37,14 @@ namespace Projet1
             long diff;
             width = Console.WindowWidth;
             height = Console.WindowHeight;
+            _screenBuffer = new char[height, width];
+            _screenBufferColor = new short[height, width];
+            _screenBufferBColor = new short[height, width];
+            buffer = new FastConsole.CharInfo[height * width];
             while (true)
             {
                 milliseconds = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-
-                _screenBuffer = new char[height, width];
-                _screenBufferColor = new short[height, width];
-                _screenBufferBColor = new short[height, width];
+                
                 draw = false;
                 for (int i = 0; i < toDraw.Count; i++)
                 {
@@ -63,7 +65,10 @@ namespace Projet1
                 diff = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                 diff -= milliseconds;
                 Console.Write("\r" + diff);
-                Thread.Sleep(15);
+                if (diff < 18)
+                {
+                   Thread.Sleep(20-(int)diff); 
+                }
             }
         }
 
@@ -73,7 +78,7 @@ namespace Projet1
             int y = c.y;
             
             List<ColoredChar[]> lines = c.GetActualValue();
-            if (lines != null && lines.Count > 0)
+            if (lines is {Count: > 0})
             {
                 char[,] value = new char[lines.Count,Card.GetWidth(lines)];
                 int k = 0;
@@ -103,18 +108,19 @@ namespace Projet1
 
         private static void Draw()
         {
-            FastConsole.CharInfo[] buffer = new FastConsole.CharInfo[_screenBuffer.GetLength(0) * _screenBuffer.GetLength(1)];
-            int index = 0;
-
             int length0 = _screenBuffer.GetLength(0);
             int length1 = _screenBuffer.GetLength(1);
+            
+            int index = 0;
+
+            
             for (int i = 0; i < length0; i++)
             {
-                index = i * Console.WindowWidth;
+                index = i * width;
                 for (int j = 0; j < length1; j++)
                 {
                     buffer[index].Char.UnicodeChar = _screenBuffer[i, j];
-                    buffer[index].Attributes = (short)(_screenBufferColor[i,j] | (_screenBufferBColor[i,j]<<4));
+                    buffer[index].Attributes = (short) ((ushort) _screenBufferColor[i,j] | (_screenBufferBColor[i,j]<<4));
                     index++;
                 }
             }
