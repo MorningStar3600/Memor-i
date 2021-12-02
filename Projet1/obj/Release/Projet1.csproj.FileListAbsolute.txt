@@ -4,3 +4,9 @@ C:\Users\ALEXA\Documents\GitHub\CardsGame\Projet1\obj\Release\Projet1.csprojAsse
 C:\Users\ALEXA\Documents\GitHub\CardsGame\Projet1\obj\Release\Projet1.csproj.CoreCompileInputs.cache
 C:\Users\ALEXA\Documents\GitHub\CardsGame\Projet1\obj\Release\Projet1.exe
 C:\Users\ALEXA\Documents\GitHub\CardsGame\Projet1\obj\Release\Projet1.pdb
+C:\Users\ALEXA\Documents\GitHub\Cards\Projet1\bin\Release\Projet1.exe
+C:\Users\ALEXA\Documents\GitHub\Cards\Projet1\bin\Release\Projet1.pdb
+C:\Users\ALEXA\Documents\GitHub\Cards\Projet1\obj\Release\Projet1.csprojAssemblyReference.cache
+C:\Users\ALEXA\Documents\GitHub\Cards\Projet1\obj\Release\Projet1.csproj.CoreCompileInputs.cache
+C:\Users\ALEXA\Documents\GitHub\Cards\Projet1\obj\Release\Projet1.exe
+C:\Users\ALEXA\Documents\GitHub\Cards\Projet1\obj\Release\Projet1.pdb

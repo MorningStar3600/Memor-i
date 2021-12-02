@@ -21,6 +21,7 @@ namespace Projet1
             int maxCardWidth = (Console.WindowWidth / nbrCardsInRow) - 3;
             int nbrCardsInColumn = (int) Math.Ceiling((double) cards.Length / (double) nbrCardsInRow);
             int maxCardHeight = (Console.WindowHeight / nbrCardsInColumn)-1;
+            _eventManager = eventManager;
             
             ProgressBar progressBar = new ProgressBar(Console.WindowWidth/2, Console.WindowHeight/2, cards.Length);
             
@@ -72,22 +73,26 @@ namespace Projet1
             }
             //evt = 0 : when card is hovered
             //evt = 1 : when card is clicked
-
+            
+            if (_actualCard != -1)
+            {
+                if (_actualCard != cardIndex)
+                {
+                    _cards[_actualCard].Select(false);
+                    _actualCard = -1;
+                }
+            }
             if (cardIndex != -1)
             {
                 
                 if (_actualCard != cardIndex)
                 {
-                    _cards[cardIndex].SetColor(ConsoleColor.Red);
+                    _cards[cardIndex].Select(true);
                     _actualCard = cardIndex;
                 }
                 _eventManager(this, cardIndex, evt);
             }
-            else if (_actualCard != -1)
-            {
-                _cards[_actualCard].SetColor(ConsoleColor.White);
-                _actualCard = -1;
-            }
+            
         }
 
         public void Draw()

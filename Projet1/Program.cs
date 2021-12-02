@@ -14,8 +14,8 @@ namespace Projet1
         {
             ConsoleManager.SetCurrentFont("Consolas",10);
             ConsoleManager.SetFullScreen();
-            Draws.Run();    
-            //ConsoleListener.run();
+            Draws.Run();
+            ConsoleListener.run();
 
             string[] name = {"1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"};
             cm = new CardManager(name, 5, Hover);
@@ -34,11 +34,7 @@ namespace Projet1
 
         public static void Hover(CardManager cm, int cardId, int eventId)
         {
-            if (eventId == 1)
-            {
-                //cm.GetCards()[cardId].switchCard(1);
-                
-            }
+            
         }
 
     }

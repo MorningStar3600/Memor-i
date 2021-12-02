@@ -55,11 +55,35 @@ namespace Projet1
             }
         }
 
-        public void SetColor(ConsoleColor c)
+        public void Select(bool isSelected)
         {
             //List<ScreenCard> list = new List<ScreenCard>();
-            this.color = c;
-            //Console.WriteLine("hhhhhhhhhhhhhhhhhhhhhhhhh");
+            for (int i = 0; i < values.Count; i++)
+            {
+                for (int j = 0; j < values[i].Count;j++)
+                {
+                    for (int k = 0; k < values[i][j].Length; k++)
+                    {
+                        if (isSelected)
+                        {
+                            if (j == 0 || j == values[i].Count - 1 || k == 0 || k == values[i][j].Length - 1)
+                            {
+                                values[i][j][k].color = ConsoleColor.Red;
+                                values[i][j][k].c = 'X';
+                            }
+                            
+                        }
+                        else
+                        {
+                            if (j == 0 || j == values[i].Count - 1 || k == 0 || k == values[i][j].Length - 1)
+                            {
+                                values[i][j][k].c = ' ';
+                            }
+                        }
+                        
+                    }
+                }
+            }
         }
 
         public bool IsInCard(int x, int y)
