@@ -11,37 +11,37 @@ namespace Projet1
         private List<Card> _cards = new List<Card>();
         private int _actualCard = -1;
         private Action<CardManager, int, int> _eventManager;
-
-        public CardManager(string[] cards, int nbrCardsInRow, Action<CardManager, int, int> eventManager, bool normalize = true)
+        private bool isClicked = false;
+        
+        
+        public CardManager(string[] cards, string[] backs, int nbrCardsInRow, Action<CardManager, int, int> eventManager, int windowWidth, int windowHeight, double animationSpeed, ConsoleColor selectColor = ConsoleColor.Blue)
         {
-            List<List<ColoredChar[]>> cardValues = new List<List<ColoredChar[]>>();
-
-            int[] cardsMaxLineLength = new int[cards.Length];
             
-            int maxCardWidth = (Console.WindowWidth / nbrCardsInRow) - 3;
+            
+            int maxCardWidth = (windowWidth / nbrCardsInRow);
             int nbrCardsInColumn = (int) Math.Ceiling((double) cards.Length / (double) nbrCardsInRow);
-            int maxCardHeight = (Console.WindowHeight / nbrCardsInColumn)-1;
+            int maxCardHeight = ((windowHeight-1)/ nbrCardsInColumn);
             _eventManager = eventManager;
             
-            ProgressBar progressBar = new ProgressBar(Console.WindowWidth/2, Console.WindowHeight/2, cards.Length);
+            //ProgressBar progressBar = new ProgressBar(windowWidth, windowHeight, cards.Length*2);
             
             for (int i = 0; i < cards.Length; i++)
             {
+                List<List<ColoredChar[]>> cardValues = new List<List<ColoredChar[]>>();
+                List<List<ColoredChar[]>> cardBackValues = new List<List<ColoredChar[]>>();
                 int cWidth = CardLoader.Load(cards[i], cardValues);
+                //progressBar.Update();
+                CardLoader.Load(backs[i], cardBackValues);
                 int x = 0;
                 int y = 0;
                 int width = 0;
                 int height = 0;
                 ComputeCardTransform(nbrCardsInRow, false, cWidth, cardValues[0].Count, i, maxCardHeight, maxCardWidth, out x, out y, out width, out height);
-                this._cards.Add(new Card(i,cardValues, x, y, width, height));
-                progressBar.Update();
+                this._cards.Add(new Card(int.Parse(cards[i]),cardValues, cardBackValues, x, y, width, height, maxCardWidth, maxCardHeight, animationSpeed, selectColor));
+                //progressBar.Update();
             }
 
-            for (int i = 0; i < cards.Length; i++)
-            {
-                Draws.toDraw.Add(this._cards[i]);
-                Thread.Sleep(20);
-            }
+            
         }
 
         private void ComputeCardTransform(int nbrCardInRow, bool normalize, int cardWidth, int cardHeight, int index, int maxCardHeight, int maxCardWidth, out int x, out int y, out int width, out int height)
@@ -90,19 +90,29 @@ namespace Projet1
                     _cards[cardIndex].Select(true);
                     _actualCard = cardIndex;
                 }
-                _eventManager(this, cardIndex, evt);
+                if (evt == 1 && !isClicked)
+                {
+                    _eventManager(this, _actualCard, 0);
+                    isClicked = true;
+                }
+                else if (evt == 0 && isClicked)
+                {
+                    _eventManager(this, _actualCard, 1);
+                    isClicked = false;
+                }
             }
             
         }
-
+        
         public void Draw()
         {
-            foreach (Card card in _cards)
+            for (int i = 0; i < this._cards.Count; i++)
             {
-                card.switchVisibility(2);
+                Draws.toDraw.Add(this._cards[i]);
+                Thread.Sleep(20);
             }
         }
-
+        
         public List<Card> GetCards()
         {
             return _cards;

@@ -6,7 +6,7 @@ namespace Projet1
 {
     class CardLoader
     {
-        public static int Load(string directory, List<List<ColoredChar[]>> cards)
+        public static int Load(string directory, List<List<ColoredChar[]>> cards, ProgressBar pb = null)
         {
             string path = Directory.GetParent(Directory.GetCurrentDirectory())?.FullName + "\\cards";
             int width = 0;
@@ -23,6 +23,10 @@ namespace Projet1
                     int width2 = ReadCardFile(files[i], card);
                     if (width2 > width) width = width2;
                     cards.Add(card);
+                    if (pb != null && i%2 == 0)
+                    {
+                        pb.Update();
+                    }
                 }
             }
             
@@ -77,12 +81,10 @@ namespace Projet1
                 }
                 sr.Close();
             }
-            catch (FileNotFoundException e)
+            catch(Exception e)
             {
-
-            }catch(Exception e)
-            {
-
+                Console.WriteLine(e.Message);
+                Console.ReadKey();
             }
 
             return maxWidth;

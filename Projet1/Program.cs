@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
+using Projet1.Menu;
 
 namespace Projet1
 {
@@ -12,15 +14,33 @@ namespace Projet1
         public static CardManager cm;
         public static void Main(string[] args)
         {
-            ConsoleManager.SetCurrentFont("Consolas",10);
-            ConsoleManager.SetFullScreen();
-            Draws.Run();
-            ConsoleListener.run();
+            Start();
+        }
 
-            string[] name = {"1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"};
-            cm = new CardManager(name, 5, Hover);
+        public static void Start()
+        {
+            ConsoleManager.SetFullScreen();
+            ConsoleManager.SetCurrentFont("Consolas",20);
+            ConsoleListener.run();
+            Draws.Run();
             
-            cm.Draw();
+            var width = Console.WindowWidth;
+            var height = Console.WindowHeight;
+            
+            ConsoleManager.SetCurrentFont("Consolas",5);
+            var miniWidth = Console.WindowWidth;
+            var miniHeight = Console.WindowHeight;
+            
+            ConsoleManager.SetCurrentFont("Consolas",50);
+            
+            Utilities.DrawCenteredText("Memor'i");
+            ProgressBar p = new ProgressBar(Console.WindowWidth/2,Console.WindowHeight/2+2, 25);
+            LoadingScreen.PreLoad(p, miniWidth, miniHeight);
+            
+            MainMenu m = new MainMenu(width,height);
+            m.Load();
+
+            
         }
 
         public static void SetColor(int x, int y)
@@ -32,9 +52,14 @@ namespace Projet1
             }
         }
 
-        public static void Hover(CardManager cm, int cardId, int eventId)
+        
+
+        public static void LoadCardManager(string[] name, string[] backName, int nbCard,Action<CardManager, int, int> eventManager, int width, int height, double animationSpeed)
         {
-            
+            LoadingScreen.Start();
+            cm = new CardManager(name, backName, nbCard, eventManager, width, height, animationSpeed);
+            LoadingScreen.Stop();
+            cm.Draw();
         }
 
     }

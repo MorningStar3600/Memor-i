@@ -11,76 +11,80 @@ namespace Projet1
         public int height { get; }
         public int x { get; }
         public int y { get; }
+        
+        public int maxWidth { get; }
+        public int maxHeight { get; }
+        public double animationSpeed { get; }
+        public ConsoleColor selectColor { get; }
 
         List<List<ColoredChar[]>> values { get; } = new List<List<ColoredChar[]>>();
         double animationIndex = 0;
-        List<ColoredChar[]> hide { get; } = new List<ColoredChar[]>();
+        private List<List<ColoredChar[]>> hides { get; } = new List<List<ColoredChar[]>>();
         private List<List<ColoredChar[]>> actualAndFutureValue { get; } = new List<List<ColoredChar[]>>();
 
-        private List<string> _value { get; } = new List<string>();
-        private List<string> _hide { get; } = new List<string>();
-
         private List<List<string>> _actualAndFutureValue { get; } = new List<List<string>>();
-        
-        
 
-        public bool rectoVerso { get; set; } = true;
-        public bool visible { get; set; }
-        public ConsoleColor color { get; set; } = ConsoleColor.White;
+        private List<string> clear { get; } = new List<string>();
 
 
-        public Card(int id, List<List<ColoredChar[]>> values, int x, int y, int width, int height)
+
+        public bool face { get; set; } = false;
+        public bool visible { get; set; } = true;
+
+
+        public Card(int id, List<List<ColoredChar[]>> values, List<List<ColoredChar[]>> back, int x, int y, int width, int height, int maxWidth, int maxHeight, double animationSpeed, ConsoleColor selectColor)
         {
             this.id = id;
             this.x = x;
             this.y = y;
             this.width = width;
             this.height = height;
+            this.maxWidth = maxWidth;
+            this.maxHeight = maxHeight;
+            this.animationSpeed = animationSpeed;
+            this.selectColor = selectColor;
 
             for (int i = 0; i < values.Count; i++)
             {
                 this.values.Add(Smooth(Resize(values[i], this.width, this.height)));
             }
             
-
-            for (int i = 0; i < this.height; i++)
+            for (int i = 0; i < back.Count; i++)
             {
-                ColoredChar[] line = new ColoredChar[this.width];
-                for (int j = 0; j < this.width; j++)
-                {
-                    if ((j == 0 || j == this.width - 1) || (i == 0 || i == this.height - 1)) line[j] = new ColoredChar('X', ConsoleColor.White);
-                    else line[j] = new ColoredChar(' ', ConsoleColor.White);
-                }
-                this.hide.Add(line);
+                this.hides.Add(Smooth(Resize(back[i], this.maxWidth, this.maxHeight)));
             }
+            
         }
 
         public void Select(bool isSelected)
         {
             //List<ScreenCard> list = new List<ScreenCard>();
-            for (int i = 0; i < values.Count; i++)
+            if (isSelected)
             {
-                for (int j = 0; j < values[i].Count;j++)
+                Surround(values, 'X', ConsoleColor.Red);
+                Surround(hides, 'X', ConsoleColor.Red);
+            }
+            else
+            {
+                Surround(values, ' ', ConsoleColor.Black);
+                Surround(hides, ' ', ConsoleColor.Black);
+            }
+        }
+
+        private void Surround(List<List<ColoredChar[]>> list, char c, ConsoleColor color)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                for (int j = 0; j < list[i].Count;j++)
                 {
-                    for (int k = 0; k < values[i][j].Length; k++)
+                    for (int k = 0; k < list[i][j].Length; k++)
                     {
-                        if (isSelected)
+                        if (j == 0 || j == list[i].Count - 1 || k == 0 || k == list[i][j].Length - 1)
                         {
-                            if (j == 0 || j == values[i].Count - 1 || k == 0 || k == values[i][j].Length - 1)
-                            {
-                                values[i][j][k].color = ConsoleColor.Red;
-                                values[i][j][k].c = 'X';
-                            }
-                            
+                            list[i][j][k].color = color;
+                            list[i][j][k].c = c;
                         }
-                        else
-                        {
-                            if (j == 0 || j == values[i].Count - 1 || k == 0 || k == values[i][j].Length - 1)
-                            {
-                                values[i][j][k].c = ' ';
-                            }
-                        }
-                        
+
                     }
                 }
             }
@@ -101,10 +105,25 @@ namespace Projet1
                 return rslt;
             }
 
-            animationIndex += 0.5;
-            if (animationIndex >= values.Count) animationIndex = 0;
-            return values[(int)animationIndex];
-            
+            if (visible)
+            {
+                if (face)
+                {
+                    animationIndex += animationSpeed;
+                    if (animationIndex >= values.Count) animationIndex = 0;
+                    return values[(int)animationIndex];
+                }
+                else
+                {
+                    animationIndex += animationSpeed;
+                    if (animationIndex >= hides.Count) animationIndex = 0;
+                    return hides[(int)animationIndex];
+                }
+            }
+            else
+            {
+                return null;
+            }
            
         }
         //public DrawItem Draw(DrawItem di = null)

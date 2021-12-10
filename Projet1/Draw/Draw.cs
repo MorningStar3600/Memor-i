@@ -11,7 +11,7 @@ namespace Projet1
         private static char[,] _screenBuffer;
         private static short[,] _screenBufferColor;
         private static short[,] _screenBufferBColor;
-        private static FastConsole.CharInfo[] buffer;
+        private static FastConsole.CharInfo[] _buffer;
 
 
         private static int width;
@@ -28,6 +28,17 @@ namespace Projet1
         public static void Stop()
         {
             _thread.Abort();
+            toDraw.Clear();
+        }
+        
+        public static void Update()
+        {
+            width = Console.WindowWidth;
+            height = Console.WindowHeight;
+            _screenBuffer = new char[height,width];
+            _screenBufferColor = new short[height,width];
+            _screenBufferBColor = new short[height,width];
+            _buffer = new FastConsole.CharInfo[width * height];
         }
 
         private static void ReDraw()
@@ -40,7 +51,7 @@ namespace Projet1
             _screenBuffer = new char[height, width];
             _screenBufferColor = new short[height, width];
             _screenBufferBColor = new short[height, width];
-            buffer = new FastConsole.CharInfo[height * width];
+            _buffer = new FastConsole.CharInfo[height * width];
             while (true)
             {
                 milliseconds = DateTimeOffset.Now.ToUnixTimeMilliseconds();
@@ -54,20 +65,26 @@ namespace Projet1
                         {
                             draw = true;
                         }
+                    }else if (toDraw[i] is AnimCard ac)
+                    {
+                        //(_screenBuffer, _screenBufferColor, _screenBufferBColor) = ac.GetValue();
+                        ForceDrawBuffer(ac.GetBuffer());
+                        draw = false;
+                        break;
                     }
                 }
                 
-                if (draw == true)
+                if (draw)
                 {
                     Draw();
                 }
                 
                 diff = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                 diff -= milliseconds;
-                Console.Write("\r" + diff);
+                //Console.Write("\r" + diff);
                 if (diff < 18)
                 {
-                   Thread.Sleep(20-(int)diff); 
+                   //Thread.Sleep(20-(int)diff); 
                 }
             }
         }
@@ -88,10 +105,11 @@ namespace Projet1
                 int length1 = value.GetLength(1);
                 for (int i = 0; i < length0; i++)
                 {
+                    l = y + i;
                     for (int j = 0; j < length1; j++)
                     {
                         k = x + j;
-                        l = y + i;
+                        
                         if (k >= 0 && k < width && l >= 0 && l < height && lines[i][j] != null)
                         {
                             _screenBuffer[l, k] = lines[i][j].c;
@@ -119,12 +137,23 @@ namespace Projet1
                 index = i * width;
                 for (int j = 0; j < length1; j++)
                 {
-                    buffer[index].Char.UnicodeChar = _screenBuffer[i, j];
-                    buffer[index].Attributes = (short) ((ushort) _screenBufferColor[i,j] | (_screenBufferBColor[i,j]<<4));
+                    _buffer[index].Char.UnicodeChar = _screenBuffer[i, j];
+                    _buffer[index].Attributes = (short) ( _screenBufferColor[i,j] | (_screenBufferBColor[i,j]<<4));
                     index++;
                 }
             }
-            FastConsole.Write(buffer, 0, 0, Console.WindowWidth, Console.WindowHeight);
+            FastConsole.Write(_buffer, 0, 0, length1, length0);
+        }
+
+        private static void ForceDrawBuffer(FastConsole.CharInfo[] buffer)
+        {
+            FastConsole.Write(buffer, 0, 0, width,height);
+        }
+
+        public static void Clear()
+        {
+            FastConsole.CharInfo[] buffer = new FastConsole.CharInfo[width * height];
+            FastConsole.Write(buffer, 0, 0, width, height);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Projet1
 {
-    class ProgressBar
+    public class ProgressBar
     {
         private int _x;
         private int _y;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using Projet1;
 
 public static class ConsoleManager
 {
@@ -85,7 +86,8 @@ public static class ConsoleManager
                 cbSize = Marshal.SizeOf<FontInfo>()
             };
             GetCurrentConsoleFontEx(ConsoleOutputHandle, false, ref after);
-
+            Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
+            Draws.Update();
             return new[] { before, set, after };
         }
         else
@@ -94,5 +96,6 @@ public static class ConsoleManager
             Console.WriteLine("Get error " + er);
             throw new System.ComponentModel.Win32Exception(er);
         }
+        
     }
 }

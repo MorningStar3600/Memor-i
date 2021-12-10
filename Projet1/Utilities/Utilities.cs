@@ -59,5 +59,11 @@ namespace Projet1
                 }
             }
         }
+
+        public static void DrawCenteredText(string text)
+        {
+            Console.SetCursorPosition(Console.WindowWidth/ 2 - text.Length / 2, Console.WindowHeight/2);
+            Console.Write(text);
+        }
     }
 }
