@@ -17,6 +17,7 @@
             string[] backName = {"1","1"};
             //{"1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"};
             Program.LoadCardManager(name, backName, 2, Hover, _width,_height, 0.58);
+            string test = "";
         }
 
         void Hover(CardManager cm, int cardId, int eventId, char key, int keyCode)

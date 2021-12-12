@@ -30,16 +30,24 @@ namespace Projet1.Menu
         {
             if (eventId == 1)
             {
+                if (cardId == 0)
+                {
+                    cm.GetCards()[1].PrevAnimation();
+                    SetDifficulty(cm);
+                }
+                if (cardId == 1)
+                {
+                    cm.GetCards()[1].NextAnimation();
+                    SetDifficulty(cm);
+                }
                 if (cardId == 2)
                 {
                     cm.GetCards()[1].NextAnimation();
                     SetDifficulty(cm);
                 }
-
-                if (cardId == 0)
+                if (cardId == 5)
                 {
-                    cm.GetCards()[1].PrevAnimation();
-                    SetDifficulty(cm);
+                    start(game, width, height, nbrCard, nbrPointsByWin, nbrPointsByLoose);
                 }
             }else if (eventId == 2)
             {

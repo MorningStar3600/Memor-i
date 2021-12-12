@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Projet1
 {
@@ -8,6 +9,7 @@ namespace Projet1
         private static Game _game;
         private static int _ptsVictory;
         private static int _ptsDefeat;
+        
         public static void Start(Game g, int width, int height, int nbrCards, int nbrPtsVictory, int nbrPtsDefeat)
         {
             _game = g;
@@ -68,6 +70,7 @@ namespace Projet1
                         _game.NextPlayer();
                         visibleCards[0].selected = false;
                         visibleCards[1].selected = false;
+                        Thread.Sleep(1000);
                         visibleCards[0].face = false;
                         visibleCards[1].face = false;
                     }

@@ -21,8 +21,7 @@ namespace Projet1
         {
             ConsoleManager.SetFullScreen();
             ConsoleManager.SetCurrentFont("Consolas",20);
-            ConsoleListener.run();
-            Draws.Run();
+            
             
             var width = Console.WindowWidth;
             var height = Console.WindowHeight;
@@ -36,6 +35,8 @@ namespace Projet1
             Utilities.DrawCenteredText("Memor'i");
             ProgressBar p = new ProgressBar(Console.WindowWidth/2,Console.WindowHeight/2+2, 25);
             LoadingScreen.PreLoad(p, miniWidth, miniHeight);
+            ConsoleListener.run();
+            Draws.Run();
             
             MainMenu m = new MainMenu(width,height);
             m.Load();
