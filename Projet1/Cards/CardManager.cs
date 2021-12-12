@@ -10,12 +10,12 @@ namespace Projet1
     {
         private List<Card> _cards = new List<Card>();
         private int _actualCard = -1;
-        private Action<CardManager, int, int> _eventManager;
+        private Action<CardManager, int, int, char, int> _eventManager;
         private bool _isClicked = false;
         private Game _game;
         
         
-        public CardManager(string[] cards, string[] backs, int nbrCardsInRow, Action<CardManager, int, int> eventManager, int windowWidth, int windowHeight, double animationSpeed, Game game = null) 
+        public CardManager(string[] cards, string[] backs, int nbrCardsInRow, Action<CardManager, int, int, char, int> eventManager, int windowWidth, int windowHeight, double animationSpeed, bool startingFace = false, Game game = null) 
         {
             
             
@@ -39,7 +39,7 @@ namespace Projet1
                 int width = 0;
                 int height = 0;
                 ComputeCardTransform(nbrCardsInRow, false, cWidth, cardValues[0].Count, i, maxCardHeight, maxCardWidth, out x, out y, out width, out height);
-                this._cards.Add(new Card(cards[i],cardValues, cardBackValues, x, y, width, height, maxCardWidth, maxCardHeight, animationSpeed));
+                this._cards.Add(new Card(cards[i],cardValues, cardBackValues, x, y, width, height, maxCardWidth, maxCardHeight, animationSpeed, startingFace));
                 //progressBar.Update();
             }
 
@@ -62,7 +62,7 @@ namespace Projet1
             
         }
         
-        public void EventHandling(int x, int y, int evt)
+        public void EventHandling(int x, int y, int evt, char key = ' ', int keyCode = -1)
         {
             int cardIndex = -1;
             for (int i = 0; i < this._cards.Count; i++)
@@ -84,7 +84,7 @@ namespace Projet1
                     _actualCard = -1;
                 }
             }
-            if (cardIndex != -1)
+            if (cardIndex != -1 && _cards[cardIndex].id != "default")
             {
                 
                 if (_actualCard != cardIndex)
@@ -102,14 +102,19 @@ namespace Projet1
                 }
                 if (evt == 1 && !_isClicked)
                 {
-                    _eventManager(this, _actualCard, 0);
+                    _eventManager(this, _actualCard, 0, key, keyCode);
                     _isClicked = true;
                 }
                 else if (evt == 0 && _isClicked)
                 {
-                    _eventManager(this, _actualCard, 1);
+                    _eventManager(this, _actualCard, 1, key, keyCode);
                     _isClicked = false;
                 }
+            }
+
+            if (evt == 2)
+            {
+                _eventManager(this,_actualCard,2,key, keyCode);
             }
             
         }

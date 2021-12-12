@@ -6,17 +6,27 @@ namespace Projet1
     static class FirstGame
     {
         private static Game _game;
-        public static void Start(Game g, int width, int height)
+        private static int _ptsVictory;
+        private static int _ptsDefeat;
+        public static void Start(Game g, int width, int height, int nbrCards, int nbrPtsVictory, int nbrPtsDefeat)
         {
             _game = g;
-            string[] cardName = new string[] {"Menu/moins", "Menu/plus", "Menu/plus", "Menu/moins","2","2"};
-            string[] cardBackName = new string[] {"1","1","1","1","1","1"};
-            Program.LoadCardManager(cardName, cardBackName, 3, EventHandler, width-g.GetNumbPlayers()*4-1, height, 0.5, g);
+            string[] cardName = RandomizedCard.GetCardPair(nbrCards/2);
+            string[] cardBackName = new string[nbrCards];
+            for (int i =0; i < nbrCards; i++)
+            {
+                cardBackName[i] = "1";
+            }
+            
+            Program.LoadCardManager(cardName, cardBackName, 5, EventHandler, width-g.GetNumbPlayers()*4-1, height, 0.5, false, g);
             ScoreTracker sc = new ScoreTracker(g, width-g.GetNumbPlayers()*4, 0, 30);
             Draws.toDraw.Add(sc);
+            
+            _ptsVictory = nbrPtsVictory;
+            _ptsDefeat = nbrPtsDefeat;
         }
 
-        private static void EventHandler(CardManager cm, int cardId, int eventId)
+        private static void EventHandler(CardManager cm, int cardId, int eventId, char key, int keyCode)
         {
             if (eventId == 1)
             {
@@ -45,7 +55,7 @@ namespace Projet1
 
                     if (visibleCards[0].id == visibleCards[1].id)
                     {
-                        _game.AddScore(_game.GetCurrentPlayer(), 100);
+                        _game.AddScore(_game.GetCurrentPlayer(), _ptsVictory);
                         _game.NextPlayer();
                         visibleCards[0].selected = false;
                         visibleCards[1].selected = false;
@@ -54,7 +64,7 @@ namespace Projet1
                     }
                     else
                     {
-                        _game.AddScore(_game.GetCurrentPlayer(), -50);
+                        _game.AddScore(_game.GetCurrentPlayer(), _ptsDefeat);
                         _game.NextPlayer();
                         visibleCards[0].selected = false;
                         visibleCards[1].selected = false;

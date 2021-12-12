@@ -54,10 +54,10 @@ namespace Projet1
 
         
 
-        public static void LoadCardManager(string[] name, string[] backName, int nbCard,Action<CardManager, int, int> eventManager, int width, int height, double animationSpeed, Game g = null)
+        public static void LoadCardManager(string[] name, string[] backName, int nbCard,Action<CardManager, int, int, char, int> eventManager, int width, int height, double animationSpeed, bool startingFace = false, Game g = null)
         {
             LoadingScreen.Start();
-            cm = new CardManager(name, backName, nbCard, eventManager, width, height, animationSpeed, g);
+            cm = new CardManager(name, backName, nbCard, eventManager, width, height, animationSpeed, startingFace, g);
             LoadingScreen.Stop();
             cm.Draw();
         }

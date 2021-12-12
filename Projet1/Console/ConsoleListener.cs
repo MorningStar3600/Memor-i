@@ -46,18 +46,24 @@ namespace Projet1 {
                             Console.WriteLine(string.Format("    dwEventFlags ....: 0x{0:X4}  ", record.MouseEvent.dwEventFlags));**/
                         } break;
 
-                    //case NativeMethods.KeyEvent:
-                    //    {
-                    //        /**Console.WriteLine("Key event  ");
-                    //        Console.WriteLine(string.Format("    bKeyDown  .......:  {0,5}  ", record.KeyEvent.bKeyDown));
-                    //        Console.WriteLine(string.Format("    wRepeatCount ....:   {0,4:0}  ", record.KeyEvent.wRepeatCount));
-                    //        Console.WriteLine(string.Format("    wVirtualKeyCode .:   {0,4:0}  ", record.KeyEvent.wVirtualKeyCode));
-                    //        Console.WriteLine(string.Format("    uChar ...........:      {0}  ", record.KeyEvent.UnicodeChar));
-                    //        Console.WriteLine(string.Format("    dwControlKeyState: 0x{0:X4}  ", record.KeyEvent.dwControlKeyState));**/
+                    case NativeMethods.KeyEvent:
+                    {
+                        if (Program.cm != null && record.KeyEvent.bKeyDown)
+                        {
+                            Program.cm.EventHandling(-1, -1, 2, record.KeyEvent.UnicodeChar, record.KeyEvent.wVirtualKeyCode);
+                        }
+                       /**Console.WriteLine("Key event  ");
+                       Console.WriteLine(string.Format("    bKeyDown  .......:  {0,5}  ", record.KeyEvent.bKeyDown)); Console.WriteLine(string.Format("    wRepeatCount ....:   {0,4:0}  ", record.KeyEvent.wRepeatCount));
+                       Console.WriteLine(string.Format("    wVirtualKeyCode .:   {0,4:0}  ", record.KeyEvent.wVirtualKeyCode));
+                       Console.WriteLine(string.Format("    uChar ...........:      {0}  ", record.KeyEvent.UnicodeChar));
+                       Console.WriteLine(string.Format("    dwControlKeyState: 0x{0:X4}  ", record.KeyEvent.dwControlKeyState));**/
 
-                    //        if (record.KeyEvent.wVirtualKeyCode == (int)ConsoleKey.Escape) { return; }
-                    //    }
-                    //    break;
+                        if (record.KeyEvent.wVirtualKeyCode == (int) ConsoleKey.Escape)
+                        {
+                            //TODO: exit
+                        }
+                    }
+                    break;
                 }
                 }
         }

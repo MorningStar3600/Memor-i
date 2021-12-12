@@ -18,7 +18,7 @@ namespace Projet1
         public ConsoleColor selectColor { get; }
 
         List<List<ColoredChar[]>> values { get; } = new List<List<ColoredChar[]>>();
-        double animationIndex = 0;
+        public double animationIndex = 0;
         private List<List<ColoredChar[]>> hides { get; } = new List<List<ColoredChar[]>>();
         private List<List<ColoredChar[]>> actualAndFutureValue { get; } = new List<List<ColoredChar[]>>();
 
@@ -28,12 +28,12 @@ namespace Projet1
 
 
 
-        public bool face { get; set; } = false;
+        public bool face { get; set; }
         public bool visible { get; set; } = true;
         public bool selected { get; set; } = false;
 
 
-        public Card(string id, List<List<ColoredChar[]>> values, List<List<ColoredChar[]>> back, int x, int y, int width, int height, int maxWidth, int maxHeight, double animationSpeed)
+        public Card(string id, List<List<ColoredChar[]>> values, List<List<ColoredChar[]>> back, int x, int y, int width, int height, int maxWidth, int maxHeight, double animationSpeed, bool face = false)
         {
             this.id = id;
             this.x = x;
@@ -43,6 +43,7 @@ namespace Projet1
             this.maxWidth = maxWidth;
             this.maxHeight = maxHeight;
             this.animationSpeed = animationSpeed;
+            this.face = face;
 
             for (int i = 0; i < values.Count; i++)
             {
@@ -109,6 +110,7 @@ namespace Projet1
             {
                 if (face)
                 {
+                    
                     animationIndex += animationSpeed;
                     if (animationIndex >= values.Count) animationIndex = 0;
                     return values[(int)animationIndex];
@@ -125,6 +127,40 @@ namespace Projet1
                 return null;
             }
            
+        }
+        
+        public void NextAnimation()
+        {
+            if (visible)
+            {
+                if (face)
+                {
+                    animationIndex += 1;
+                    if (animationIndex >= values.Count) animationIndex = 0;
+                }
+                else
+                {
+                    animationIndex += 1;
+                    if (animationIndex >= hides.Count) animationIndex = 0;
+                }
+            }
+        }
+        
+        public void PrevAnimation()
+        {
+            if (visible)
+            {
+                if (face)
+                {
+                    animationIndex -= 1;
+                    if (animationIndex < 0) animationIndex = values.Count - 1;
+                }
+                else
+                {
+                    animationIndex -= 1;
+                    if (animationIndex < 0) animationIndex = hides.Count - 1;
+                }
+            }
         }
         //public DrawItem Draw(DrawItem di = null)
         //{

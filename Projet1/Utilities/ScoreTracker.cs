@@ -35,7 +35,7 @@ namespace Projet1
                 {
                     int scale = (int)((double)_game._players[i].actualScore / maxScore*height);
                     if (scale > height) scale = height;
-                    for (int j = 1; j < scale+1; j++)
+                    for (int j = 0; j < scale; j++)
                     {
                         rslt[height - j, i*4] = new ColoredChar(playerChar, playerColor);
                         rslt[height - j, i*4+1] = new ColoredChar(playerChar, playerColor);
@@ -54,7 +54,7 @@ namespace Projet1
                 {
                     int scale = -(int)((double)_game._players[i].actualScore / maxScore*height);
                     if (scale > height) scale = height;
-                    for (int j = 1; j < scale +1; j++)
+                    for (int j = 0; j < scale; j++)
                     {
                         rslt[height + j, i*4] = new ColoredChar(playerChar, playerColor);
                         rslt[height + j, i*4+1] = new ColoredChar(playerChar, playerColor);
