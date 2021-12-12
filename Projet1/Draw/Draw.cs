@@ -71,6 +71,12 @@ namespace Projet1
                         ForceDrawBuffer(ac.GetBuffer());
                         draw = false;
                         break;
+                    }else if (toDraw[i] is ScoreTracker st)
+                    {
+                        if (AppendToActualScreenBuffer(st))
+                        {
+                            draw = true;
+                        }
                     }
                 }
                 
@@ -123,6 +129,41 @@ namespace Projet1
             }
             return false;
         }
+        
+        private static bool AppendToActualScreenBuffer(ScoreTracker sc)
+        {
+            int x = sc.x;
+            int y = sc.y;
+            
+            ColoredChar[,] lines = sc.GetScore();
+            if (lines.GetLength(0)>0)
+            {
+                char[,] value = new char[lines.GetLength(0),lines.GetLength(1)];
+                int k = 0;
+                int l = 0;
+
+                int length0 = value.GetLength(0);
+                int length1 = value.GetLength(1);
+                for (int i = 0; i < length0; i++)
+                {
+                    l = y + i;
+                    for (int j = 0; j < length1; j++)
+                    {
+                        k = x + j;
+                        
+                        if (k >= 0 && k < width && l >= 0 && l < height && lines[i,j] != null)
+                        {
+                            _screenBuffer[l, k] = lines[i,j].c;
+                            _screenBufferColor[l, k] = (short)lines[i,j].color;
+                            _screenBufferBColor[l, k] = (short)lines[i,j].bColor;
+                            
+                        }
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
 
         private static void Draw()
         {
@@ -138,7 +179,7 @@ namespace Projet1
                 for (int j = 0; j < length1; j++)
                 {
                     _buffer[index].Char.UnicodeChar = _screenBuffer[i, j];
-                    _buffer[index].Attributes = (short) ( _screenBufferColor[i,j] | (_screenBufferBColor[i,j]<<4));
+                    _buffer[index].Attributes = (short) (_screenBufferColor[i,j] | (_screenBufferBColor[i,j]<<4));
                     index++;
                 }
             }

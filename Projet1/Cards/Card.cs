@@ -6,7 +6,7 @@ namespace Projet1
 {
     class Card
     {
-        private int id;
+        public string id;
         public int width { get; }
         public int height { get; }
         public int x { get; }
@@ -30,9 +30,10 @@ namespace Projet1
 
         public bool face { get; set; } = false;
         public bool visible { get; set; } = true;
+        public bool selected { get; set; } = false;
 
 
-        public Card(int id, List<List<ColoredChar[]>> values, List<List<ColoredChar[]>> back, int x, int y, int width, int height, int maxWidth, int maxHeight, double animationSpeed, ConsoleColor selectColor)
+        public Card(string id, List<List<ColoredChar[]>> values, List<List<ColoredChar[]>> back, int x, int y, int width, int height, int maxWidth, int maxHeight, double animationSpeed)
         {
             this.id = id;
             this.x = x;
@@ -42,7 +43,6 @@ namespace Projet1
             this.maxWidth = maxWidth;
             this.maxHeight = maxHeight;
             this.animationSpeed = animationSpeed;
-            this.selectColor = selectColor;
 
             for (int i = 0; i < values.Count; i++)
             {
@@ -56,13 +56,13 @@ namespace Projet1
             
         }
 
-        public void Select(bool isSelected)
+        public void Select(bool isSelected, char c = ' ', ConsoleColor color = ConsoleColor.Black)
         {
             //List<ScreenCard> list = new List<ScreenCard>();
             if (isSelected)
             {
-                Surround(values, 'X', ConsoleColor.Red);
-                Surround(hides, 'X', ConsoleColor.Red);
+                Surround(values, c, color);
+                Surround(hides, c, color);
             }
             else
             {

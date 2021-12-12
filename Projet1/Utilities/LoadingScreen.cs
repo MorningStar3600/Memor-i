@@ -16,6 +16,7 @@ namespace Projet1
 
         public static void Start()
         {
+            Draws.toDraw.Clear();
             ConsoleManager.SetCurrentFont("Consolas",5);
             Draws.toDraw.Add(_animCard);
         }

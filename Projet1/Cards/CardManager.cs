@@ -11,10 +11,11 @@ namespace Projet1
         private List<Card> _cards = new List<Card>();
         private int _actualCard = -1;
         private Action<CardManager, int, int> _eventManager;
-        private bool isClicked = false;
+        private bool _isClicked = false;
+        private Game _game;
         
         
-        public CardManager(string[] cards, string[] backs, int nbrCardsInRow, Action<CardManager, int, int> eventManager, int windowWidth, int windowHeight, double animationSpeed, ConsoleColor selectColor = ConsoleColor.Blue)
+        public CardManager(string[] cards, string[] backs, int nbrCardsInRow, Action<CardManager, int, int> eventManager, int windowWidth, int windowHeight, double animationSpeed, Game game = null) 
         {
             
             
@@ -22,6 +23,7 @@ namespace Projet1
             int nbrCardsInColumn = (int) Math.Ceiling((double) cards.Length / (double) nbrCardsInRow);
             int maxCardHeight = ((windowHeight-1)/ nbrCardsInColumn);
             _eventManager = eventManager;
+            _game = game;
             
             //ProgressBar progressBar = new ProgressBar(windowWidth, windowHeight, cards.Length*2);
             
@@ -37,7 +39,7 @@ namespace Projet1
                 int width = 0;
                 int height = 0;
                 ComputeCardTransform(nbrCardsInRow, false, cWidth, cardValues[0].Count, i, maxCardHeight, maxCardWidth, out x, out y, out width, out height);
-                this._cards.Add(new Card(int.Parse(cards[i]),cardValues, cardBackValues, x, y, width, height, maxCardWidth, maxCardHeight, animationSpeed, selectColor));
+                this._cards.Add(new Card(cards[i],cardValues, cardBackValues, x, y, width, height, maxCardWidth, maxCardHeight, animationSpeed));
                 //progressBar.Update();
             }
 
@@ -87,18 +89,26 @@ namespace Projet1
                 
                 if (_actualCard != cardIndex)
                 {
-                    _cards[cardIndex].Select(true);
+                    if (_game != null)
+                    {
+                        _cards[cardIndex].Select(true, _game.GetCurrentPlayer().character, _game.GetCurrentPlayer().color);
+                    }
+                    else
+                    {
+                        _cards[cardIndex].Select(true, 'X', ConsoleColor.Red);
+                    }
+                    
                     _actualCard = cardIndex;
                 }
-                if (evt == 1 && !isClicked)
+                if (evt == 1 && !_isClicked)
                 {
                     _eventManager(this, _actualCard, 0);
-                    isClicked = true;
+                    _isClicked = true;
                 }
-                else if (evt == 0 && isClicked)
+                else if (evt == 0 && _isClicked)
                 {
                     _eventManager(this, _actualCard, 1);
-                    isClicked = false;
+                    _isClicked = false;
                 }
             }
             
