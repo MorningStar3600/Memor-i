@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 namespace Projet1
 {
-    class Card
+    public class Card
     {
         public string id;
         public int width { get; }
@@ -84,6 +84,39 @@ namespace Projet1
                         {
                             list[i][j][k].color = color;
                             list[i][j][k].c = c;
+                        }
+
+                    }
+                }
+            }
+        }
+
+        public void Fade(bool fade)
+        {
+            if (fade)
+            {
+                ChangeColor(values, -1);
+                ChangeColor(hides,-1);
+            }
+            else
+            {
+                ChangeColor(values, 1);
+                ChangeColor(hides,1);
+            }
+        }
+
+        private void ChangeColor(List<List<ColoredChar[]>> list, int howToChange)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                for (int j = 0; j < list[i].Count;j++)
+                {
+                    for (int k = 0; k < list[i][j].Length; k++)
+                    {
+                        if (j == 0 || j == list[i].Count - 1 || k == 0 || k == list[i][j].Length - 1)
+                        {
+                            list[i][j][k].color += howToChange;
+                            list[i][j][k].bColor += howToChange;
                         }
 
                     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Projet1
 {
-    class ColoredChar
+    public class ColoredChar
     {
         public char c;
         public static int nbr = 0;

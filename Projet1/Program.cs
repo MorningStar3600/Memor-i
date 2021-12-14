@@ -12,6 +12,8 @@ namespace Projet1
         public static int x = 0;
         public static int y = 0;
         public static CardManager cm;
+        public static CardManager onHoldCm;
+        public static bool isInMenu = false;
         public static void Main(string[] args)
         {
             Start();
@@ -21,10 +23,13 @@ namespace Projet1
         {
             ConsoleManager.SetFullScreen();
             ConsoleManager.SetCurrentFont("Consolas",20);
+            Console.CursorVisible = false;
             
             
             var width = Console.WindowWidth;
             var height = Console.WindowHeight;
+            CardManager.WindowsWidth = width;
+            CardManager.WindowsHeight = height;
             
             ConsoleManager.SetCurrentFont("Consolas",5);
             var miniWidth = Console.WindowWidth;
@@ -37,11 +42,9 @@ namespace Projet1
             LoadingScreen.PreLoad(p, miniWidth, miniHeight);
             ConsoleListener.run();
             Draws.Run();
-            
-            MainMenu m = new MainMenu(width,height);
-            m.Load();
+            MainMenu.Start(width, height);
 
-            
+
         }
 
         public static void SetColor(int x, int y)

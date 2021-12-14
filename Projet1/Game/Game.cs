@@ -47,13 +47,6 @@ namespace Projet1
                 sw.WriteLine(line);
             }
             sw.Close();
-            
-            //display file content
-            Console.WriteLine("File content:");
-            foreach (var line in File.ReadAllLines(path))
-            {
-                Console.WriteLine(line);
-            }
         }
         
         public Player GetCurrentPlayer()
@@ -86,6 +79,11 @@ namespace Projet1
             player.AddScore(score);
         }
         
+        public int GetScore(Player player)
+        {
+            return player.GetScore();
+        }
+        
         public void SetIdGame(int id)
         {
             _idGame = id;
@@ -94,6 +92,14 @@ namespace Projet1
         public int GetNumbPlayers()
         {
             return _players.Length;
+        }
+
+        public void EndGame()
+        {
+            for (int i = 0; i < _players.Length; i++)
+            {
+                _players[i].actualScore = 0;
+            }
         }
         
     }

@@ -16,9 +16,9 @@ namespace Projet1.Menu
         private static int nbrPointsByLoose = -25;
         public static void Start(Game game, int width, int height, Action<Game, int, int, int, int, int> start)
         {
-            string[] cards = {"Menu/moins","Stars","Menu/plus","default","default","Enter"};
-            string[] back = {"default","default","default","default","default","default"};
-            Program.LoadCardManager(cards, back, 3, EventHandler, width, height, 0, true);
+            string[] cards = {"default","default","default","default","default","default","Menu/moins","Stars","Menu/plus","default","default","default","default","default","Enter"};
+            string[] back = {"default","default","default","default","default","default","default","default","default","default","default","default","default","default","default"};
+            Program.LoadCardManager(cards, back, 5, EventHandler, width, height, 0, true);
             
             DifficultyMenu.game = game;
             DifficultyMenu.start = start;
@@ -30,22 +30,22 @@ namespace Projet1.Menu
         {
             if (eventId == 1)
             {
-                if (cardId == 0)
+                if (cardId == 6)
                 {
-                    cm.GetCards()[1].PrevAnimation();
+                    cm.GetCards()[7].PrevAnimation();
                     SetDifficulty(cm);
                 }
-                if (cardId == 1)
+                if (cardId == 7)
                 {
-                    cm.GetCards()[1].NextAnimation();
+                    cm.GetCards()[7].NextAnimation();
                     SetDifficulty(cm);
                 }
-                if (cardId == 2)
+                if (cardId == 8)
                 {
-                    cm.GetCards()[1].NextAnimation();
+                    cm.GetCards()[7].NextAnimation();
                     SetDifficulty(cm);
                 }
-                if (cardId == 5)
+                if (cardId == 14)
                 {
                     start(game, width, height, nbrCard, nbrPointsByWin, nbrPointsByLoose);
                 }
@@ -54,6 +54,18 @@ namespace Projet1.Menu
                 if (keyCode == 13)
                 {
                     start(game, width, height, nbrCard, nbrPointsByWin, nbrPointsByLoose);
+                }
+
+                if (keyCode == 37)
+                {
+                    cm.GetCards()[7].PrevAnimation();
+                    SetDifficulty(cm);
+                }
+                
+                if (keyCode == 39)
+                {
+                    cm.GetCards()[7].NextAnimation();
+                    SetDifficulty(cm);
                 }
             }
         }

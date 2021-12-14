@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using Projet1.Menu;
 
 namespace Projet1
 {
@@ -20,7 +21,7 @@ namespace Projet1
                 cardBackName[i] = "1";
             }
             
-            Program.LoadCardManager(cardName, cardBackName, 5, EventHandler, width-g.GetNumbPlayers()*4-1, height, 0.5, false, g);
+            Program.LoadCardManager(cardName, cardBackName, 5, EventHandler, width-g.GetNumbPlayers()*4-1, height, 0.02, false, g);
             ScoreTracker sc = new ScoreTracker(g, width-g.GetNumbPlayers()*4, 0, 30);
             Draws.toDraw.Add(sc);
             
@@ -43,37 +44,69 @@ namespace Projet1
                     cm.GetCards()[cardId].face = false;
                 }
                 
-                List<Card> visibleCards = new List<Card>();
+                List<Card> selectedCards = new List<Card>();
+                
                 for (int i = 0; i < cm.GetCards().Count; i++)
                 {
                     if (cm.GetCards()[i].selected)
                     {
-                        visibleCards.Add(cm.GetCards()[i]);
+                        selectedCards.Add(cm.GetCards()[i]);
                     }
                 }
-
-                if (visibleCards.Count == 2)
+                if (selectedCards.Count == 2)
                 {
 
-                    if (visibleCards[0].id == visibleCards[1].id)
+                    if (selectedCards[0].id == selectedCards[1].id)
                     {
                         _game.AddScore(_game.GetCurrentPlayer(), _ptsVictory);
                         _game.NextPlayer();
-                        visibleCards[0].selected = false;
-                        visibleCards[1].selected = false;
-                        visibleCards[0].face = true;
-                        visibleCards[1].face = true;
+                        selectedCards[0].selected = false;
+                        selectedCards[1].selected = false;
+                        selectedCards[0].face = true;
+                        selectedCards[1].face = true;
                     }
                     else
                     {
                         _game.AddScore(_game.GetCurrentPlayer(), _ptsDefeat);
                         _game.NextPlayer();
-                        visibleCards[0].selected = false;
-                        visibleCards[1].selected = false;
+                        selectedCards[0].selected = false;
+                        selectedCards[1].selected = false;
                         Thread.Sleep(1000);
-                        visibleCards[0].face = false;
-                        visibleCards[1].face = false;
+                        selectedCards[0].face = false;
+                        selectedCards[1].face = false;
                     }
+                }
+                List<Card> hiddenCards = new List<Card>();
+                for (int i = 0; i < cm.GetCards().Count; i++)
+                {
+                    if (cm.GetCards()[i].face == false)
+                    {
+                        hiddenCards.Add(cm.GetCards()[i]);
+                    }
+                }
+                
+                if (hiddenCards.Count == 0)
+                {
+                    Thread.Sleep(2000);
+                    int maxPlayer = 0;
+                    for (int k = 0; k < _game._players.Length; k++)
+                    {
+                        if (_game._players[k].GetScore() < _game._players[maxPlayer].GetScore())
+                        {
+                            maxPlayer = k;
+                        }
+                    }
+                    
+                    for (int k = 0; k < _game._players.Length; k++)
+                    {
+                        if (k != maxPlayer)
+                        {
+                            _game.Lose(_game._players[k]);
+                        }
+                    }
+                    _game.Win(_game._players[maxPlayer]);
+                    
+                    WinMenu.Start(CardManager.WindowsWidth, CardManager.WindowsHeight, _game);
                 }
             }
         }

@@ -53,7 +53,6 @@ namespace Projet1
             {
                 scores.Add(new int[] { idGame, 1, 0, actualScore });
             }
-            actualScore = 0;
         }
 
         public void Lose(int idGame)
@@ -68,7 +67,6 @@ namespace Projet1
             {
                 scores.Add(new int[] { idGame, 0, 1, actualScore });
             }
-            actualScore = 0;
         }
         
         public void AddScore(int score)
@@ -114,11 +112,18 @@ namespace Projet1
                     var value = scores.Aggregate(name, (current, t) => current + ("|" + t[0] + "\\" + t[1] + "\\" + t[2] + "\\" + t[3]));
                     lines[i] = value;
                     return;
-
                 }
             }
             
-            lines.Add(name);
+            lines.Add(scores.Aggregate(name, (current, t) => current + ("|" + t[0] + "\\" + t[1] + "\\" + t[2] + "\\" + t[3])));
         }
+        
+        public int GetScore()
+        {
+            return actualScore;
+        }
+        
+        
+        
     }
 }

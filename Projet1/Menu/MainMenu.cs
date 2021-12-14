@@ -1,38 +1,34 @@
 ﻿namespace Projet1.Menu
 {
-    class MainMenu
+    static class MainMenu
     {
-        int _width;
-        int _height;
-        public MainMenu(int width, int height)
+        static int _width;
+        static int _height;
+
+        public static void Start(int width, int height)
         {
             _width = width;
             _height = height;
+            string[] name = {"default","default","default", "default","default","default","Menu/1","default","Menu/2","default","default","default","default","default", "default"};
+            //{"1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"};
+            string[] backName = {"default","default","default","default","default","default","default","default","default","default","default","default","default","default","default"};
+            //{"1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"};
+            Program.LoadCardManager(name, backName, 5, Hover, _width,_height, 0.58, true);
         }
 
-        public void Load()
-        {
-            string[] name = {"1","1"};
-            //{"1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"};
-            string[] backName = {"1","1"};
-            //{"1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"};
-            Program.LoadCardManager(name, backName, 2, Hover, _width,_height, 0.58);
-            string test = "";
-        }
-
-        void Hover(CardManager cm, int cardId, int eventId, char key, int keyCode)
+        static void Hover(CardManager cm, int cardId, int eventId, char key, int keyCode)
         {
             if (eventId == 1)
             {
                 switch (cardId)
                 {
-                    case 0 :
+                    case 6 :
                     {
                         Game g = new Game(0, new string[] {"Eleonore","Alexandre"});
                         DifficultyMenu.Start(g, _width, _height, FirstGame.Start);
                         break;
                     }
-                    case 1:
+                    case 8:
                     {
                         break;
                     }

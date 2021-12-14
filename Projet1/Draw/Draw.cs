@@ -6,7 +6,7 @@ namespace Projet1
 {
     class Draws
     {
-        static public List<Object> toDraw { get; set; } = new List<Object>();
+        static public List<Object> toDraw { get; set; } = new ();
         static private readonly Thread _thread;
         private static char[,] _screenBuffer;
         private static short[,] _screenBufferColor;
@@ -74,6 +74,12 @@ namespace Projet1
                     }else if (toDraw[i] is ScoreTracker st)
                     {
                         if (AppendToActualScreenBuffer(st))
+                        {
+                            draw = true;
+                        }
+                    }else if (toDraw[i] is UpdatedText ut)
+                    {
+                        if (AppendToActualScreenBuffer(ut))
                         {
                             draw = true;
                         }
@@ -164,6 +170,35 @@ namespace Projet1
             }
             return false;
         }
+        
+        private static bool AppendToActualScreenBuffer(UpdatedText ut)
+        {
+            int x, y;
+
+            (x, y) = ut.GetPosition();
+            
+            ColoredChar[] lines = ut.GetValue();
+            if (lines.Length>0)
+            {
+                char[,] value = new char[1,lines.Length];
+                int k = 0;
+
+                int length0 = value.Length;
+                for (int i = 0; i < length0; i++)
+                {
+                    k = x + i;
+                    if (k >= 0 && k < width && y >= 0 && y < height && lines[i] != null)
+                    {
+                        _screenBuffer[y, k] = lines[i].c;
+                        _screenBufferColor[y, k] = (short)lines[i].color;
+                        _screenBufferBColor[y, k] = (short)lines[i].bColor;
+                            
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
 
         private static void Draw()
         {
@@ -193,8 +228,11 @@ namespace Projet1
 
         public static void Clear()
         {
-            FastConsole.CharInfo[] buffer = new FastConsole.CharInfo[width * height];
-            FastConsole.Write(buffer, 0, 0, width, height);
+            _screenBuffer = new char[height, width];
+            _screenBufferColor = new short[height, width];
+            _screenBufferBColor = new short[height, width];
+            _buffer = new FastConsole.CharInfo[width * height];
+            FastConsole.Write(_buffer, 0, 0, width, height);
         }
     }
 }

@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.AccessControl;
 using System.Threading;
+using Projet1.Menu;
 
 namespace Projet1
 {
-    class CardManager
+    public class CardManager
     {
+        public static int WindowsWidth = 0;
+        public static int WindowsHeight = 0;
+        
         private List<Card> _cards = new List<Card>();
         private int _actualCard = -1;
         private Action<CardManager, int, int, char, int> _eventManager;
@@ -114,7 +118,30 @@ namespace Projet1
 
             if (evt == 2)
             {
-                _eventManager(this,_actualCard,2,key, keyCode);
+                if (keyCode == 27)
+                {
+                    if (Program.isInMenu)
+                    {
+                        Draws.toDraw.Clear();
+                        Draws.Clear();
+                        Program.cm = Program.onHoldCm;
+                        Program.isInMenu = false;
+                        Program.cm.Draw();
+                    }
+                    else
+                    {
+                        Draws.toDraw.Clear();
+                        Draws.Clear();
+                        Program.onHoldCm = Program.cm;
+                        Program.isInMenu = true;
+                        EscMenu.Start(WindowsWidth, WindowsHeight);
+                    }
+                }
+                else
+                {
+                    _eventManager(this,_actualCard,2,key, keyCode);
+                }
+                
             }
             
         }
@@ -131,6 +158,24 @@ namespace Projet1
         public List<Card> GetCards()
         {
             return _cards;
+        }
+
+        public void FadeCards(bool fade)
+        {
+            if (fade)
+            {
+                for (int i = 0; i < _cards.Count; i++)
+                {
+                    _cards[i].Fade(true);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < _cards.Count; i++)
+                {
+                    _cards[i].Fade(false);
+                }
+            }
         }
     }
 }
