@@ -87,7 +87,7 @@ public static class ConsoleManager
             };
             GetCurrentConsoleFontEx(ConsoleOutputHandle, false, ref after);
             Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
-            Console.SetBufferSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
+            //Console.SetBufferSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
 
             Draws.Update();
             return new[] { before, set, after };
