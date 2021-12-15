@@ -1,4 +1,4 @@
 MorningStar|20\12\12\12
 Dagger
-Eleonore|0\1\4\225
-Alexandre|0\4\1\175
+Eleonore|0\2\4\225
+Alexandre|0\4\2\175

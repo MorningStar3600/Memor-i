@@ -1,4 +1,6 @@
-﻿namespace Projet1.Menu
+﻿using System;
+
+namespace Projet1.Menu
 {
     static class MainMenu
     {
@@ -30,6 +32,10 @@
                     }
                     case 8:
                     {
+                        Game g = new Game(0, new string[] {"Default"});
+                        g._players[0].character = 'O';
+                        g._players[0].color = ConsoleColor.White;
+                        PlayerSelectionMenu.Start(_width, _height, g);
                         break;
                     }
                 }

@@ -54,6 +54,7 @@
     <Compile Include="Menu\DifficultyMenu.cs" />
     <Compile Include="Menu\EscMenu.cs" />
     <Compile Include="Menu\MainMenu.cs" />
+    <Compile Include="Menu\PlayerSelectionMenu.cs" />
     <Compile Include="Menu\WinMenu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

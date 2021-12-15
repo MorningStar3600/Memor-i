@@ -8,7 +8,7 @@ namespace Projet1
     public class Game
     {
         private int _idGame;
-        public readonly Player[] _players;
+        public Player[] _players;
         private int _indexPlayer;
         public int maxScore;
         
@@ -22,11 +22,6 @@ namespace Projet1
             {
                 _players[i] = new Player(names[i]);
             }
-
-            _players[0].color = ConsoleColor.DarkGreen;
-            _players[0].character = 'E';
-            _players[1].color = ConsoleColor.Blue;
-            _players[1].character = 'A';
             
         }
 
@@ -100,6 +95,32 @@ namespace Projet1
             {
                 _players[i].actualScore = 0;
             }
+        }
+
+        public void AddPlayer(string name, ConsoleColor color, char c)
+        {
+            var newPlayer = new Player(name);
+            newPlayer.color = color;
+            newPlayer.character = c;
+            
+            Player[] newPlayers = new Player[_players.Length + 1];
+            for (int i = 0; i < _players.Length; i++)
+            {
+                newPlayers[i] = _players[i];
+            }
+            newPlayers[newPlayers.Length-1] = newPlayer;
+            _players = newPlayers;
+        }
+        
+        public void RemovePlayer()
+        {
+            Player[] newPlayers = new Player[_players.Length - 1];
+            for (int i = 0; i < _players.Length-1; i++)
+            {
+                newPlayers[i] = _players[i];
+
+            }
+            _players = newPlayers;
         }
         
     }

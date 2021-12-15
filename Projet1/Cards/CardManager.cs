@@ -17,6 +17,7 @@ namespace Projet1
         private Action<CardManager, int, int, char, int> _eventManager;
         private bool _isClicked = false;
         private Game _game;
+        public bool hoverHandle = true;
         
         
         public CardManager(string[] cards, string[] backs, int nbrCardsInRow, Action<CardManager, int, int, char, int> eventManager, int windowWidth, int windowHeight, double animationSpeed, bool startingFace = false, Game game = null) 
@@ -84,7 +85,7 @@ namespace Projet1
             {
                 if (_actualCard != cardIndex)
                 {
-                    _cards[_actualCard].Select(false);
+                    if (hoverHandle)_cards[_actualCard].Select(false);
                     _actualCard = -1;
                 }
             }
@@ -93,11 +94,11 @@ namespace Projet1
                 
                 if (_actualCard != cardIndex)
                 {
-                    if (_game != null)
+                    if (_game != null && hoverHandle)
                     {
                         _cards[cardIndex].Select(true, _game.GetCurrentPlayer().character, _game.GetCurrentPlayer().color);
                     }
-                    else
+                    else if (hoverHandle)
                     {
                         _cards[cardIndex].Select(true, 'X', ConsoleColor.Red);
                     }
@@ -106,12 +107,12 @@ namespace Projet1
                 }
                 if (evt == 1 && !_isClicked)
                 {
-                    _eventManager(this, _actualCard, 0, key, keyCode);
+                    _eventManager(this, _actualCard, 1, key, keyCode);
                     _isClicked = true;
                 }
                 else if (evt == 0 && _isClicked)
                 {
-                    _eventManager(this, _actualCard, 1, key, keyCode);
+                    _eventManager(this, _actualCard, 0, key, keyCode);
                     _isClicked = false;
                 }
             }
