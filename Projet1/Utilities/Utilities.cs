@@ -65,5 +65,6 @@ namespace Projet1
             Console.SetCursorPosition(Console.WindowWidth/ 2 - text.Length / 2, Console.WindowHeight/2);
             Console.Write(text);
         }
+        
     }
 }

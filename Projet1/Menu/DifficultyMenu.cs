@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace Projet1.Menu
 {
@@ -24,6 +25,8 @@ namespace Projet1.Menu
             DifficultyMenu.start = start;
             DifficultyMenu.width = width;
             DifficultyMenu.height = height;
+            
+            
         }
 
         private static void EventHandler(CardManager cm, int cardId, int eventId, char key, int keyCode)
@@ -72,7 +75,7 @@ namespace Projet1.Menu
 
         private static void SetDifficulty(CardManager cm)
         {
-            switch(cm.GetCards()[1].animationIndex)
+            switch(cm.GetCards()[7].animationIndex)
             {
                 case 0:
                 {

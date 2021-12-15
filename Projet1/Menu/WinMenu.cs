@@ -15,7 +15,7 @@ namespace Projet1.Menu
             game.SavePlayersToFile();
             
             ArrayList list = new ArrayList();
-            for (int i = 0; i < game._players.Length; i++)
+            for (int i = 0; i < game.GetNumbPlayers(); i++)
             {
                 string value = game._players[i].GetName() + ":" + game._players[i].GetScore();
                 list.Add(new UpdatedText(value, 10, i*3+3));

@@ -47,9 +47,11 @@
     <Compile Include="Console\ConsoleListener.cs" />
     <Compile Include="Console\ConsoleManager.cs" />
     <Compile Include="Draw\Draw.cs" />
+    <Compile Include="Game\Config.cs" />
     <Compile Include="Game\FirstGame.cs" />
     <Compile Include="Game\Game.cs" />
     <Compile Include="Game\Player.cs" />
+    <Compile Include="Game\SecondGame.cs" />
     <Compile Include="Menu\ConfigMenu.cs" />
     <Compile Include="Menu\DifficultyMenu.cs" />
     <Compile Include="Menu\EscMenu.cs" />

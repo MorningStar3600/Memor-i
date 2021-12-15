@@ -14,6 +14,7 @@ namespace Projet1
         public static void Start(Game g, int width, int height, int nbrCards, int nbrPtsVictory, int nbrPtsDefeat)
         {
             _game = g;
+            _game.IdGame = 1;
             string[] cardName = RandomizedCard.GetCardPair(nbrCards/2);
             string[] cardBackName = new string[nbrCards];
             for (int i =0; i < nbrCards; i++)
@@ -21,7 +22,7 @@ namespace Projet1
                 cardBackName[i] = "1";
             }
             
-            Program.LoadCardManager(cardName, cardBackName, 5, EventHandler, width-g.GetNumbPlayers()*4-1, height, 0.02, false, g);
+            Program.LoadCardManager(cardName, cardBackName, 5, EventHandler, width-g.GetNumbPlayers()*4-1, height, Config.AnimationSpeed, false, g);
             ScoreTracker sc = new ScoreTracker(g, width-g.GetNumbPlayers()*4, 0, 30);
             Draws.toDraw.Add(sc);
             
@@ -89,7 +90,7 @@ namespace Projet1
                 {
                     Thread.Sleep(2000);
                     int maxPlayer = 0;
-                    for (int k = 0; k < _game._players.Length; k++)
+                    for (int k = 0; k < _game.GetNumbPlayers(); k++)
                     {
                         if (_game._players[k].GetScore() < _game._players[maxPlayer].GetScore())
                         {
@@ -97,7 +98,7 @@ namespace Projet1
                         }
                     }
                     
-                    for (int k = 0; k < _game._players.Length; k++)
+                    for (int k = 0; k < _game.GetNumbPlayers(); k++)
                     {
                         if (k != maxPlayer)
                         {

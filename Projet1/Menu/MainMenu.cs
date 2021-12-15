@@ -27,7 +27,7 @@ namespace Projet1.Menu
                     case 6 :
                     {
                         Game g = new Game(0, new string[] {"Eleonore","Alexandre"});
-                        DifficultyMenu.Start(g, _width, _height, FirstGame.Start);
+                        DifficultyMenu.Start(g, _width, _height, SecondGame.Start);
                         break;
                     }
                     case 8:

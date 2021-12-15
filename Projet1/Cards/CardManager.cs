@@ -27,7 +27,7 @@ namespace Projet1
             int maxCardWidth = (windowWidth / nbrCardsInRow);
             int nbrCardsInColumn = (int) Math.Ceiling((double) cards.Length / (double) nbrCardsInRow);
             int maxCardHeight = ((windowHeight-1)/ nbrCardsInColumn);
-            _eventManager = eventManager;
+            
             _game = game;
             
             //ProgressBar progressBar = new ProgressBar(windowWidth, windowHeight, cards.Length*2);
@@ -47,6 +47,8 @@ namespace Projet1
                 this._cards.Add(new Card(cards[i],cardValues, cardBackValues, x, y, width, height, maxCardWidth, maxCardHeight, animationSpeed, startingFace));
                 //progressBar.Update();
             }
+            
+            _eventManager = eventManager;
 
             
         }
@@ -91,7 +93,6 @@ namespace Projet1
             }
             if (cardIndex != -1 && _cards[cardIndex].id != "default")
             {
-                
                 if (_actualCard != cardIndex)
                 {
                     if (_game != null && hoverHandle)
@@ -102,19 +103,29 @@ namespace Projet1
                     {
                         _cards[cardIndex].Select(true, 'X', ConsoleColor.Red);
                     }
-                    
+                
                     _actualCard = cardIndex;
                 }
+            
                 if (evt == 1 && !_isClicked)
                 {
-                    _eventManager(this, _actualCard, 1, key, keyCode);
-                    _isClicked = true;
+                    if (_eventManager != null)
+                    {
+                        _eventManager(this, _actualCard, 1, ' ', 0);
+                        _isClicked = true;
+                    }
+                
                 }
                 else if (evt == 0 && _isClicked)
                 {
-                    _eventManager(this, _actualCard, 0, key, keyCode);
-                    _isClicked = false;
+                    if (_eventManager != null)
+                    {
+                        _eventManager(this, _actualCard, 0, ' ', 0);
+                        _isClicked = false;
+                    }
+                
                 }
+                
             }
 
             if (evt == 2)
@@ -149,10 +160,18 @@ namespace Projet1
         
         public void Draw()
         {
-            for (int i = 0; i < this._cards.Count; i++)
+            foreach (var t in _cards)
             {
-                Draws.toDraw.Add(this._cards[i]);
+                Draws.toDraw.Add(t);
                 Thread.Sleep(20);
+            }
+        }
+        
+        public void Hide()
+        {
+            foreach (var t in _cards)
+            {
+                Draws.toDraw.Remove(t);
             }
         }
         

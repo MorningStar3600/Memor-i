@@ -14,12 +14,12 @@ namespace Projet1
         
         public int maxWidth { get; }
         public int maxHeight { get; }
-        public double animationSpeed { get; }
+        public double animationSpeed { get; set; }
         public ConsoleColor selectColor { get; }
 
-        List<List<ColoredChar[]>> values { get; } = new List<List<ColoredChar[]>>();
+        public List<List<ColoredChar[]>> values { get; } = new List<List<ColoredChar[]>>();
         public double animationIndex = 0;
-        private List<List<ColoredChar[]>> hides { get; } = new List<List<ColoredChar[]>>();
+        public List<List<ColoredChar[]>> hides { get; } = new List<List<ColoredChar[]>>();
         private List<List<ColoredChar[]>> actualAndFutureValue { get; } = new List<List<ColoredChar[]>>();
 
         private List<List<string>> _actualAndFutureValue { get; } = new List<List<string>>();

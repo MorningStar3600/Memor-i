@@ -35,7 +35,6 @@ namespace Projet1.Menu
                 {
                     Draws.toDraw.Clear();
                     Draws.Clear();
-                    Program.isInMenu = false;
                     ConfigMenu.Start(Console.WindowWidth, Console.WindowHeight);
                 }
             }

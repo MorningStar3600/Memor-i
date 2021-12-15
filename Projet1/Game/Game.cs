@@ -8,7 +8,7 @@ namespace Projet1
     public class Game
     {
         private int _idGame;
-        public Player[] _players;
+        public List<Player> _players;
         private int _indexPlayer;
         public int maxScore;
         
@@ -16,13 +16,25 @@ namespace Projet1
         {
             _idGame = id;
             _indexPlayer = 0;
-            _players = new Player[names.Length];
+            _players = new List<Player>();
             this.maxScore = maxScore;
             for (int i = 0; i < names.Length; i++)
             {
-                _players[i] = new Player(names[i]);
+                _players.Add(new Player(names[i])
+                {
+                    color = ConsoleColor.White,
+                    character = '0'
+                });
             }
             
+        }
+        
+        public Game(int id, List<Player> players, int maxScore = 1000)
+        {
+            _idGame = id;
+            _indexPlayer = 0;
+            _players = players;
+            this.maxScore = maxScore;
         }
 
         public void SavePlayersToFile()
@@ -52,7 +64,7 @@ namespace Projet1
         public Player NextPlayer()
         {
             _indexPlayer++;
-            if (_indexPlayer >= _players.Length)
+            if (_indexPlayer >= GetNumbPlayers())
             {
                 _indexPlayer = 0;
             }
@@ -79,19 +91,20 @@ namespace Projet1
             return player.GetScore();
         }
         
-        public void SetIdGame(int id)
+        public int IdGame
         {
-            _idGame = id;
+            get => _idGame;
+            set => _idGame = value;
         }
         
         public int GetNumbPlayers()
         {
-            return _players.Length;
+            return _players.Count;
         }
 
         public void EndGame()
         {
-            for (int i = 0; i < _players.Length; i++)
+            for (int i = 0; i < GetNumbPlayers(); i++)
             {
                 _players[i].actualScore = 0;
             }
@@ -99,28 +112,17 @@ namespace Projet1
 
         public void AddPlayer(string name, ConsoleColor color, char c)
         {
-            var newPlayer = new Player(name);
-            newPlayer.color = color;
-            newPlayer.character = c;
-            
-            Player[] newPlayers = new Player[_players.Length + 1];
-            for (int i = 0; i < _players.Length; i++)
+            var newPlayer = new Player(name)
             {
-                newPlayers[i] = _players[i];
-            }
-            newPlayers[newPlayers.Length-1] = newPlayer;
-            _players = newPlayers;
+                color = color,
+                character = c
+            };
+            _players.Add(newPlayer);
         }
         
         public void RemovePlayer()
         {
-            Player[] newPlayers = new Player[_players.Length - 1];
-            for (int i = 0; i < _players.Length-1; i++)
-            {
-                newPlayers[i] = _players[i];
-
-            }
-            _players = newPlayers;
+            _players.RemoveAt(GetNumbPlayers() - 1);
         }
         
     }

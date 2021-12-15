@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace Projet1.Menu
 {
@@ -7,34 +8,24 @@ namespace Projet1.Menu
         private static Game _g;
         private static int _width;
         private static int _height;
+        private static int time = 0;
+        private static int _nbPlayer = 1;
         public static void Start(int width, int height, Game g)
         {
             _g = g;
             _width = width;
             _height = height;
             
-            string[] cards = new string[12];
-            for (int i = 0; i < 12; i++)
+            string[] cards = new string[18];
+            for (int i = 0; i < 18; i++)
             {
-                if (i < g.GetNumbPlayers())
-                {
-                    cards[i] = "Menu/player";
-                }else if (i == g.GetNumbPlayers())
-                {
-                    cards[i] = "Menu/moins";
-                }else if (i == g.GetNumbPlayers() + 1)
-                {
-                    cards[i] = "Menu/plus";
-                }
-                else
-                {
-                    cards[i] = "default";
-                }
+                cards[i] = "Menu/player";
             }
             
-            string[] back = {"default","default","default","default","default","default","default","default","default","default","default","default"};
+            string[] back = {"default","default","default","default","default","default","default","default","default","default","default","default","default","default","default","default","default","default"};
             Draws.toDraw.Clear();
             Draws.Clear();
+            Program.cm = null;
             Program.cm = new CardManager(cards, back, 6, EventHandler, width, height, 0, true)
             {
                 hoverHandle = false
@@ -44,6 +35,10 @@ namespace Projet1.Menu
             {
                 Program.cm.GetCards()[i].Select(true, _g._players[i].character, _g._players[i].color);
             }
+            
+            Program.cm.GetCards()[0].animationIndex = 3;
+            Program.cm.GetCards()[1].animationIndex = 2;
+            Program.cm.GetCards()[2].animationIndex = 1;
         }
 
         private static void EventHandler(CardManager cm, int cardId, int eventId, char key, int keyCode)
@@ -58,19 +53,24 @@ namespace Projet1.Menu
                 {
                     if (_g.GetNumbPlayers() <= 9)
                     {
-                        _g.AddPlayer("init", ConsoleColor.White, 'i');
-                        Start(_width, _height, _g);
+                        Program.cm.GetCards()[cardId].NextAnimation();
+                        Program.cm.GetCards()[cardId-1].NextAnimation();
                     }
-                }else if (cardId == _g.GetNumbPlayers())
+                }
+            
+                if (cardId == _g.GetNumbPlayers())
                 {
+                    Draws.toDraw.Add(new UpdatedText("What??", 50, 0));
                     if (_g.GetNumbPlayers() >= 2)
                     {
                         _g.RemovePlayer();
                         Start(_width, _height, _g);
                     }
                 }
-                else if (cardId < _g.GetNumbPlayers())
+            
+                if (cardId < _g.GetNumbPlayers())
                 {
+                    Draws.toDraw.Add(new UpdatedText("What???", 50, 0));
                     _g._players[cardId].color++;
                     if ((int)_g._players[cardId].color == 16)
                     {
