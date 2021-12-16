@@ -9,16 +9,16 @@ namespace Projet1
     public class Player
     {
         private string name { get; set; }
-        
+
         private List<int[]> scores { get; set; }
-        
+
         public int actualScore { get; set; }
-        
+
         public char character { get; set; }
         public ConsoleColor color { get; set; }
-        
+
         //Pseudo|id jeu1\nbr victoires\nbr défaites\meilleur score|id jeu2\nbr victoires\nbr défaites\meilleur score
-        
+
         public Player()
         {
             name = "";
@@ -49,6 +49,7 @@ namespace Projet1
                     t[3] = actualScore;
                 }
             }
+
             if (!isSaved)
             {
                 scores.Add(new int[] { idGame, 1, 0, actualScore });
@@ -63,12 +64,13 @@ namespace Projet1
                 isSaved = true;
                 t[2]++;
             }
+
             if (!isSaved)
             {
                 scores.Add(new int[] { idGame, 0, 1, actualScore });
             }
         }
-        
+
         public void AddScore(int score)
         {
             actualScore += score;
@@ -86,6 +88,7 @@ namespace Projet1
                 if (line.Split('|')[0] == name) break;
                 line = sr.ReadLine();
             }
+
             sr.Close();
 
             if (line == null) return;
@@ -96,34 +99,42 @@ namespace Projet1
                 var v = values[i].Split('\\');
                 scores.Add(new int[] { int.Parse(v[0]), int.Parse(v[1]), int.Parse(v[2]), int.Parse(v[3]) });
             }
-            
         }
-        
+
         /// <summary>
         /// Real function to change list of scores in file of player
         /// </summary>
         /// <param name="lines"></param>
-        public void SavePlayer(List<string> lines)
+        public void SavePlayer(List<string> lines, int id)
         {
             for (int i = 0; i < lines.Count; i++)
             {
                 if (lines[i].Split('|')[0] == name)
                 {
-                    var value = scores.Aggregate(name, (current, t) => current + ("|" + t[0] + "\\" + t[1] + "\\" + t[2] + "\\" + t[3]));
-                    lines[i] = value;
+                    string value = "";
+                    for (int j = 0; j < scores.Count; j++)
+                    {
+                        if (j < scores.Count-1)
+                        {
+                            
+                        }
+                        else
+                        {
+                            
+                        }
+                    }
+                    
                     return;
                 }
             }
-            
-            lines.Add(scores.Aggregate(name, (current, t) => current + ("|" + t[0] + "\\" + t[1] + "\\" + t[2] + "\\" + t[3])));
+
+            lines.Add(scores.Aggregate(name,
+                (current, t) => current + ("|" + t[0] + "\\" + t[1] + "\\" + t[2] + "\\" + t[3])));
         }
-        
+
         public int GetScore()
         {
             return actualScore;
         }
-        
-        
-        
     }
 }

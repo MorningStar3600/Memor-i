@@ -15,12 +15,21 @@ namespace Projet1.Menu
             game.SavePlayersToFile();
             
             ArrayList list = new ArrayList();
+            list.Add(new UpdatedText("Scores partie :", width / 3, height / 3 - game.GetNumbPlayers() / 2 - 2));
             for (int i = 0; i < game.GetNumbPlayers(); i++)
             {
                 string value = game._players[i].GetName() + ":" + game._players[i].GetScore();
-                list.Add(new UpdatedText(value, 10, i*3+3));
+                list.Add(new UpdatedText(value, width/3, height/2 - game.GetNumbPlayers()/2+i*2));
             }
-            
+
+            string[] scores = game.GetScoresFromGame(game.IdGame);
+            list.Add(new UpdatedText("Scores globaux :", 2*width / 3, height / 3 - scores.Length / 2 - 2));
+            for (int i = 0; i < scores.Length; i++)
+            {
+                Draws.toDraw.Add(new UpdatedText("Test?", 0, i));
+                list.Add(new UpdatedText(scores[i], 2*width/3, height/2 - game.GetNumbPlayers()/2+i*2));
+            }
+
             for (int i = 0; i < list.Count; i++)
             {
                 Draws.toDraw.Add(list[i] as UpdatedText);

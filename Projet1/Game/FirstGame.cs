@@ -14,7 +14,7 @@ namespace Projet1
         public static void Start(Game g, int width, int height, int nbrCards, int nbrPtsVictory, int nbrPtsDefeat)
         {
             _game = g;
-            _game.IdGame = 1;
+            _game.IdGame = 0;
             string[] cardName = RandomizedCard.GetCardPair(nbrCards/2);
             string[] cardBackName = new string[nbrCards];
             for (int i =0; i < nbrCards; i++)

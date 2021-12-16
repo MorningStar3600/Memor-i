@@ -36,6 +36,32 @@ namespace Projet1
             _players = players;
             this.maxScore = maxScore;
         }
+        //Pseudo|id jeu1\nbr victoires\nbr défaites\meilleur score|id jeu2\nbr victoires\nbr défaites\meilleur score
+        public string[] GetScoresFromGame(int gameId)
+        {
+            var path = Directory.GetParent(Directory.GetCurrentDirectory())?.FullName + "\\save\\save.txt";
+            var lines = File.ReadAllLines(path);
+
+            List<string> rslt = new List<string>();
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string[] values = lines[i].Split('|');
+                for (int j = 1; j < values.Length; j++)
+                {
+                    
+                    string[] elements = values[j].Split('\\');
+                    if (elements[0] == gameId.ToString())
+                    {
+                        rslt.Add(values[0] + " : " + elements[3]);
+                    }
+                }
+                
+            }
+
+            return rslt.ToArray();
+
+        }
 
         public void SavePlayersToFile()
         {
@@ -45,7 +71,7 @@ namespace Projet1
             var linesValue = lines.ToList();
             foreach (var t in _players)
             {
-                t.SavePlayer(linesValue);
+                //t.SavePlayer(linesValue);
             }
             
             var sw = new StreamWriter(path);
