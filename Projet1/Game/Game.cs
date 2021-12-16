@@ -22,7 +22,7 @@ namespace Projet1
             {
                 _players.Add(new Player(names[i])
                 {
-                    color = ConsoleColor.White,
+                    color = (ConsoleColor)i+1,
                     character = '0'
                 });
             }

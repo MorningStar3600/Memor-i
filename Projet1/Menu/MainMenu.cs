@@ -6,6 +6,7 @@ namespace Projet1.Menu
     {
         static int _width;
         static int _height;
+        private static Game _game;
 
         public static void Start(int width, int height)
         {
@@ -16,6 +17,7 @@ namespace Projet1.Menu
             string[] backName = {"default","default","default","default","default","default","default","default","default","default","default","default","default","default","default"};
             //{"1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"};
             Program.LoadCardManager(name, backName, 5, Hover, _width,_height, 0.58, true);
+            _game = new Game(0, new string[] {"Eleonore","Alexandre"});
         }
 
         static void Hover(CardManager cm, int cardId, int eventId, char key, int keyCode)
@@ -26,16 +28,12 @@ namespace Projet1.Menu
                 {
                     case 6 :
                     {
-                        Game g = new Game(0, new string[] {"Eleonore","Alexandre"});
-                        DifficultyMenu.Start(g, _width, _height, SecondGame.Start);
+                        DifficultyMenu.Start(_game, _width, _height, FirstGame.Start);
                         break;
                     }
                     case 8:
                     {
-                        Game g = new Game(0, new string[] {"Default"});
-                        g._players[0].character = 'O';
-                        g._players[0].color = ConsoleColor.White;
-                        PlayerSelectionMenu.Start(_width, _height, g);
+                        DifficultyMenu.Start(_game, _width, _height, SecondGame.Start);
                         break;
                     }
                 }

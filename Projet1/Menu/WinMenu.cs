@@ -5,8 +5,12 @@ namespace Projet1.Menu
 {
     public static class WinMenu
     {
+        private static int _width;
+        private static int _height;
         public static void Start(int width, int height, Game game)
         {
+            _width = width;
+            _height = height;
             
             string[] cards = {"default","default","default","default","default","default","default","default","default","default","default","default","default","default","default","default","default","default","default","Menu/main"};
             string[] back = {"default","default","default","default","default","default","default","default","default","default","default","default","default","default","default","default","default","default","default","default"};
@@ -41,7 +45,13 @@ namespace Projet1.Menu
 
         private static void EventHandler(CardManager cm, int cardId, int eventId, char key, int keyCode)
         {
-            
+            if (eventId == 1)
+            {
+                if (cardId == 19)
+                {
+                    MainMenu.Start(_width, _height);
+                }
+            }
         }
     }
 }
