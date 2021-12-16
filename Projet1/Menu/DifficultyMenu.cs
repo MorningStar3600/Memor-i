@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
@@ -17,7 +18,7 @@ namespace Projet1.Menu
         private static int nbrPointsByLoose = -25;
         public static void Start(Game game, int width, int height, Action<Game, int, int, int, int, int> start)
         {
-            string[] cards = {"default","default","default","default","default","default","Menu/moins","Stars","Menu/plus","default","default","default","default","default","Enter"};
+            string[] cards = {"default","Menu/moins","Menu/player","Menu/plus","default","default","Menu/moins","Stars","Menu/plus","default","default","default","default","default","Enter"};
             string[] back = {"default","default","default","default","default","default","default","default","default","default","default","default","default","default","default"};
             Program.LoadCardManager(cards, back, 5, EventHandler, width, height, 0, true);
             
@@ -33,6 +34,21 @@ namespace Projet1.Menu
         {
             if (eventId == 1)
             {
+                if (cardId == 1)
+                {
+                    cm.GetCards()[2].PrevAnimation();
+                    SetNumberPlayer(cm);
+                }
+                if (cardId == 2)
+                {
+                    cm.GetCards()[2].NextAnimation();
+                    SetNumberPlayer(cm);
+                }
+                if (cardId == 3)
+                {
+                    cm.GetCards()[2].NextAnimation();
+                    SetNumberPlayer(cm);
+                }
                 if (cardId == 6)
                 {
                     cm.GetCards()[7].PrevAnimation();
@@ -97,6 +113,29 @@ namespace Projet1.Menu
                     nbrCard = 20;
                     nbrPointsByWin = 200;
                     nbrPointsByLoose = -100;
+                    break;
+                }
+            }
+        }
+
+        private static void SetNumberPlayer(CardManager cm)
+        {
+            switch(cm.GetCards()[2].animationIndex)
+            {
+                case 0:
+                {
+                    game._players = new List<Player>() {new("Joueur 1") {color = ConsoleColor.Cyan, character = '1'}};
+                    break;  
+                }
+
+                case 1:
+                {
+                    game._players = new List<Player>() {new("Joueur 1") {color = ConsoleColor.Cyan, character = '1'}, new("Joueur 2") {color = ConsoleColor.Green, character = '2'}};
+                    break;
+                }
+                case 2:
+                {
+                    game._players = new List<Player>() {new("Joueur 1") {color = ConsoleColor.Cyan, character = '1'}, new("Joueur 2") {color = ConsoleColor.Green, character = '2'}, new("Joueur 3") {color = ConsoleColor.Red, character = '3'}};
                     break;
                 }
             }
