@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using Projet1.Menu;
 
 namespace Projet1
 {
@@ -9,6 +10,8 @@ namespace Projet1
         private static int _ptsVictory;
         private static int _ptsDefeat;
         private static Random rdm = new Random();
+        private static int _width;
+        private static int _height;
 
         private static string idCurrentCard = "";
         
@@ -16,6 +19,9 @@ namespace Projet1
         {
             _game = g;
             _game.IdGame = 1;
+            _width = width;
+            _height = height;
+            
             string[] cardName = RandomizedCard.GetCardPair(nbrCards/2);
             string[] cardBackName = new string[nbrCards];
             for (int i =0; i < nbrCards; i++)
@@ -29,8 +35,14 @@ namespace Projet1
             
             _ptsVictory = nbrPtsVictory;
             _ptsDefeat = nbrPtsDefeat;
+
+            for (int i = 4; i >= 0; i--)
+            {
+                Draws.toDraw.Add(new UpdatedText((i+1).ToString(), 0, 0));
+                Thread.Sleep(1000);
+            }
+            Draws.toDraw.Add(new UpdatedText(" ", 0, 0));
             
-            Thread.Sleep(5000);
             for (int i = 0; i < Program.cm.GetCards().Count; i++)
             {
                 Program.cm.GetCards()[i].face = false;
@@ -56,6 +68,7 @@ namespace Projet1
                     else
                     {
                         _game.GetCurrentPlayer().AddScore(_ptsVictory);
+                        Thread.Sleep(100);
                         ReturnHazardCard();
                         _game.NextPlayer();
                     }
@@ -67,13 +80,30 @@ namespace Projet1
         private static void ReturnHazardCard()
         {
             Card c;
-            do
+            int count = 0;
+            for (int i = 0; i < Program.cm.GetCards().Count; i++)
             {
-                c = Program.cm.GetCards()[rdm.Next(0, Program.cm.GetCards().Count)];
-            } while (c.face);
+                if (Program.cm.GetCards()[i].face == false)
+                {
+                    count++;
+                }
+            }
+
+            if (count > 0)
+            {
+                do
+                {
+                    c = Program.cm.GetCards()[rdm.Next(0, Program.cm.GetCards().Count)];
+                } while (c.face);
             
-            c.face = true;
-            idCurrentCard = c.id;
+                c.face = true;
+                idCurrentCard = c.id;
+            }
+            else
+            {
+                WinMenu.Start(_width, _height, _game);
+            }
+            
             
         }
     }

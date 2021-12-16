@@ -59,6 +59,13 @@ namespace Projet1
                 }
             }
         }
+        
+        public static void DrawColoredCharArrayRec(ColoredChar[] arr, int i = 0)
+        {
+            if (arr == null || i >= arr.Length) return;
+            Console.Write(arr[i]);
+            DrawColoredCharArrayRec(arr, i + 1);
+        }
 
         public static void DrawCenteredText(string text)
         {

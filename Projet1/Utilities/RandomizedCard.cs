@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Projet1
 {
     public static class RandomizedCard
     {
-        private static readonly string[] PossibleCards = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "11"};
+        private static readonly ArrayList PossibleCards = new(){"2", "3", "4", "5", "6", "7", "8", "9", "10", "11","12","13","14","15"};
         public static string[] GetCardPair(int nbrPair)
         {
             Random rdm = new Random();
@@ -16,18 +17,18 @@ namespace Projet1
                 int value;
                 do
                 {
-                    value = rdm.Next(0, PossibleCards.Length);
+                    value = rdm.Next(0, PossibleCards.Count);
                     isUnique = true;
                     for (int j = 0; j < i; j++)
                     {
-                        if (toDispatch[j] == PossibleCards[value])
+                        if (toDispatch[j] == (string)PossibleCards[value])
                         {
                             isUnique = false;
                             break;
                         }
                     }
                 } while (!isUnique); 
-                toDispatch[i] = PossibleCards[value];
+                toDispatch[i] = (string) PossibleCards[value];
             }
             
             

@@ -19,7 +19,20 @@ namespace Projet1.Menu
             string[] cards = new string[18];
             for (int i = 0; i < 18; i++)
             {
-                cards[i] = "Menu/player";
+                if (i < g.GetNumbPlayers())
+                {
+                    cards[i] = "Menu/player";
+                }else if (i == g.GetNumbPlayers())
+                {
+                    cards[i] = "Menu/moins";
+                }else if (i == g.GetNumbPlayers() + 1)
+                {
+                    cards[i] = "Menu/plus";
+                }
+                else
+                {
+                    cards[i] = "default";
+                }
             }
             
             string[] back = {"default","default","default","default","default","default","default","default","default","default","default","default","default","default","default","default","default","default"};
@@ -35,10 +48,6 @@ namespace Projet1.Menu
             {
                 Program.cm.GetCards()[i].Select(true, _g._players[i].character, _g._players[i].color);
             }
-            
-            Program.cm.GetCards()[0].animationIndex = 3;
-            Program.cm.GetCards()[1].animationIndex = 2;
-            Program.cm.GetCards()[2].animationIndex = 1;
         }
 
         private static void EventHandler(CardManager cm, int cardId, int eventId, char key, int keyCode)
@@ -47,35 +56,18 @@ namespace Projet1.Menu
             {
                 Program.cm.GetCards()[i].Select(true, _g._players[i].character, _g._players[i].color);
             }
+
             if (eventId == 1)
             {
                 if (cardId == _g.GetNumbPlayers()+1)
                 {
-                    if (_g.GetNumbPlayers() <= 9)
-                    {
-                        Program.cm.GetCards()[cardId].NextAnimation();
-                        Program.cm.GetCards()[cardId-1].NextAnimation();
-                    }
+                    _g.AddPlayer("test2", ConsoleColor.White, 'H');
+                    Start(_width, _height, _g);
                 }
-            
-                if (cardId == _g.GetNumbPlayers())
+                else if (cardId == _g.GetNumbPlayers())
                 {
-                    Draws.toDraw.Add(new UpdatedText("What??", 50, 0));
-                    if (_g.GetNumbPlayers() >= 2)
-                    {
-                        _g.RemovePlayer();
-                        Start(_width, _height, _g);
-                    }
-                }
-            
-                if (cardId < _g.GetNumbPlayers())
-                {
-                    Draws.toDraw.Add(new UpdatedText("What???", 50, 0));
-                    _g._players[cardId].color++;
-                    if ((int)_g._players[cardId].color == 16)
-                    {
-                        _g._players[cardId].color = 0;
-                    }
+                    _g.RemovePlayer();
+                    Start(_width, _height, _g);
                 }
             }
         }

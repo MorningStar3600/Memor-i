@@ -45,6 +45,17 @@ namespace Projet1
             }
             return result;
         }
+
+        public ColoredChar[] GetValue(ColoredChar[] cc, int i = 0)
+        {
+            if (cc != null && i < cc.Length)
+            {
+                cc[i] = new ColoredChar(value[i], color, bColor);
+                return GetValue(cc, i + 1);
+            }
+
+            return cc;
+        }
         
         public (int, int) GetPosition()
         {
