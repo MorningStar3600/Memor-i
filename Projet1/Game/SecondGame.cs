@@ -61,13 +61,13 @@ namespace Projet1
                     cm.GetCards()[cardId].face = true;
                     if (cm.GetCards()[cardId].id != idCurrentCard)
                     {
-                        _game.GetCurrentPlayer().AddScore(_ptsDefeat);
+                        _game.AddScore(_game.GetCurrentPlayer(), _ptsDefeat);
                         Thread.Sleep(1000);
                         cm.GetCards()[cardId].face = false;
                     }
                     else
                     {
-                        _game.GetCurrentPlayer().AddScore(_ptsVictory);
+                        _game.AddScore(_game.GetCurrentPlayer(), _ptsVictory);
                         Thread.Sleep(100);
                         ReturnHazardCard();
                         _game.NextPlayer();

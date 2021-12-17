@@ -14,6 +14,7 @@ namespace Projet1
         
         public Game(int id, string[] names, int maxScore = 1000)
         {
+            Score.Load();
             _idGame = id;
             _indexPlayer = 0;
             _players = new List<Player>();
@@ -37,51 +38,11 @@ namespace Projet1
             this.maxScore = maxScore;
         }
         //Pseudo|id jeu1\nbr victoires\nbr défaites\meilleur score|id jeu2\nbr victoires\nbr défaites\meilleur score
-        public string[] GetScoresFromGame(int gameId)
+        public string GetBestScoreFromGame(int gameId)
         {
-            var path = Directory.GetParent(Directory.GetCurrentDirectory())?.FullName + "\\save\\save.txt";
-            var lines = File.ReadAllLines(path);
-
-            List<string> rslt = new List<string>();
-
-            for (int i = 0; i < lines.Length; i++)
-            {
-                string[] values = lines[i].Split('|');
-                for (int j = 1; j < values.Length; j++)
-                {
-                    
-                    string[] elements = values[j].Split('\\');
-                    if (elements[0] == gameId.ToString())
-                    {
-                        rslt.Add(values[0] + " : " + elements[3]);
-                    }
-                }
-                
-            }
-
-            return rslt.ToArray();
-
+            return Score.GetHighScore(gameId);  
         }
 
-        public void SavePlayersToFile()
-        {
-            var path = Directory.GetParent(Directory.GetCurrentDirectory())?.FullName + "\\save\\save.txt";
-            var lines = File.ReadAllLines(path);
-
-            var linesValue = lines.ToList();
-            foreach (var t in _players)
-            {
-                //t.SavePlayer(linesValue);
-            }
-            
-            var sw = new StreamWriter(path);
-            foreach (var line in linesValue)
-            {
-                sw.WriteLine(line);
-            }
-            sw.Close();
-        }
-        
         public Player GetCurrentPlayer()
         {
             return _players[_indexPlayer];
@@ -109,12 +70,12 @@ namespace Projet1
         
         public void AddScore(Player player, int score)
         {
-            player.AddScore(score);
+            Score.AddScore(_idGame, player, score);
         }
         
         public int GetScore(Player player)
         {
-            return player.GetScore();
+            return Score.GetScore(_idGame, player);
         }
         
         public int IdGame
@@ -130,10 +91,7 @@ namespace Projet1
 
         public void EndGame()
         {
-            for (int i = 0; i < GetNumbPlayers(); i++)
-            {
-                _players[i].actualScore = 0;
-            }
+            Score.EndScores();
         }
 
         public void AddPlayer(string name, ConsoleColor color, char c)

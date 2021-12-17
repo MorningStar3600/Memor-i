@@ -31,9 +31,9 @@ namespace Projet1
                 char playerChar = _game._players[i].character;
                 ConsoleColor playerColor = _game._players[i].color;
                 
-                if (_game._players[i].actualScore >= 0)
+                if (Score.GetScore(_game.IdGame, _game._players[i]) >= 0)
                 {
-                    int scale = (int)((double)_game._players[i].actualScore / maxScore*height);
+                    int scale = (int)((double)Score.GetScore(_game.IdGame, _game._players[i]) / maxScore*height);
                     if (scale > height) scale = height;
                     for (int j = 0; j < scale; j++)
                     {
@@ -52,7 +52,7 @@ namespace Projet1
                 }
                 else
                 {
-                    int scale = -(int)((double)_game._players[i].actualScore / maxScore*height);
+                    int scale = -(int)((double)Score.GetScore(_game.IdGame, _game._players[i]) / maxScore*height);
                     if (scale > height) scale = height;
                     for (int j = 0; j < scale; j++)
                     {

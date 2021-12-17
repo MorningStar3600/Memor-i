@@ -60,6 +60,9 @@
     <Compile Include="Menu\WinMenu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scores\GameScore.cs" />
+    <Compile Include="Scores\PlayerScore.cs" />
+    <Compile Include="Scores\Score.cs" />
     <Compile Include="Utilities\ColoredChar.cs" />
     <Compile Include="Utilities\LoadingScreen.cs" />
     <Compile Include="Utilities\Logs.cs" />

@@ -16,23 +16,20 @@ namespace Projet1.Menu
             string[] back = {"default","default","default","default","default","default","default","default","default","default","default","default","default","default","default","default","default","default","default","default"};
             Program.LoadCardManager(cards, back, 5, EventHandler, width, height, 0, true);
             
-            game.SavePlayersToFile();
+            Score.Save();
             
             ArrayList list = new ArrayList();
             list.Add(new UpdatedText("Scores partie :", width / 3, height / 3 - game.GetNumbPlayers() / 2 - 2));
             for (int i = 0; i < game.GetNumbPlayers(); i++)
             {
-                string value = game._players[i].GetName() + ":" + game._players[i].GetScore();
-                list.Add(new UpdatedText(value, width/3, height/2 - game.GetNumbPlayers()/2+i*2));
+                string value = game._players[i].GetName() + ":" + Score.GetScore(game.IdGame, game._players[i]);
+                list.Add(new UpdatedText(value, width/3, height/3 - game.GetNumbPlayers()/2+i*2));
             }
 
-            string[] scores = game.GetScoresFromGame(game.IdGame);
-            list.Add(new UpdatedText("Scores globaux :", 2*width / 3, height / 3 - scores.Length / 2 - 2));
-            for (int i = 0; i < scores.Length; i++)
-            {
-                Draws.toDraw.Add(new UpdatedText("Test?", 0, i));
-                list.Add(new UpdatedText(scores[i], 2*width/3, height/2 - game.GetNumbPlayers()/2+i*2));
-            }
+            
+            list.Add(new UpdatedText("Meilleur joueur de ce jeu : ", 2*width / 3, height / 3 - 2));
+            string bestPlayer = game.GetBestScoreFromGame(game.IdGame).Split('\\')[0] + " : " + game.GetBestScoreFromGame(game.IdGame).Split('\\')[1];
+            list.Add(new UpdatedText(bestPlayer, 2 * width / 3, height / 3));
 
             for (int i = 0; i < list.Count; i++)
             {

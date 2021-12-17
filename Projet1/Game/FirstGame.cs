@@ -92,10 +92,10 @@ namespace Projet1
                     int maxPlayer = 0;
                     for (int k = 0; k < _game.GetNumbPlayers(); k++)
                     {
-                        if (_game._players[k].GetScore() < _game._players[maxPlayer].GetScore())
+                        /*if (_game._players[k].GetScore() < _game._players[maxPlayer].GetScore())
                         {
                             maxPlayer = k;
-                        }
+                        }*/
                     }
                     
                     for (int k = 0; k < _game.GetNumbPlayers(); k++)
